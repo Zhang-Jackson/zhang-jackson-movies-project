@@ -35,24 +35,24 @@
     },
     {
       "title": "Lion King",
-      "director": "Sergio",
-      "year": "1994",
-      "genre": "Animal Kingdom",
-      "actors": "Simba",
-      "plot": "Tears",
-      "rating": "5",
-      "poster": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.amazon.com%2FAdvance-Rolled-Movie-Poster-27x40%2Fdp%2FB07SV41XR4&psig=AOvVaw35L0tvi6Uh8__K2vlGZRr1&ust=1619120286796000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPC1m56LkPACFQAAAAAdAAAAABAE",
-      "id": 5
-    },
-    {
-      "title": "Lion King",
       "director": "",
       "year": "",
       "genre": "",
       "actors": "",
       "plot": "",
       "rating": "",
-      "poster": "C:\\fakepath\\image.png",
+      "poster": "https://m.media-amazon.com/images/M/MV5BYWMwMzQxZjQtODM1YS00YmFiLTk1YjQtNzNiYWY1MDE4NTdiXkEyXkFqcGdeQXVyNDYyMDk5MTU@._V1_SX300.jpg",
+      "id": 5
+    },
+    {
+      "title": "Attempt 1,000",
+      "director": "",
+      "year": "",
+      "genre": "",
+      "actors": "",
+      "plot": "",
+      "rating": "",
+      "poster": "https://images-na.ssl-images-amazon.com/images/I/61sJaBqGxZL._AC_SL1184_.jpg",
       "id": 6
     }
   ]
