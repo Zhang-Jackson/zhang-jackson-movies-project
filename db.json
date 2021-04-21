@@ -32,6 +32,17 @@
       "plot": "A special military unit fights a powerful, out-of-control supercomputer and hundreds of scientists who have mutated into flesh-eating creatures after a laboratory accident.",
       "actors": "Ryan McCluskey, Oscar Pearce, Indra Ové, Anna Bolt",
       "id": 4
+    },
+    {
+      "title": "Lion King",
+      "director": "ME",
+      "year": "1994",
+      "genre": "Cartoon",
+      "actors": "Sergio",
+      "plot": "Save sergio",
+      "rating": "4",
+      "poster": "C:\\fakepath\\lion-king.zw1zlxbyzc1hc3nldhmvbw92awvzl2fizwi5mtcwlwe0ztctngqyny05nwjlltm3mzmxmtlizdlhns53zwjw",
+      "id": 5
     }
   ]
 }
