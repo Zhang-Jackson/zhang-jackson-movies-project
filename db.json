@@ -80,6 +80,17 @@
       "rating": 5,
       "comments": "This is a really good place for coding and eating",
       "id": 16
+    },
+    {
+      "title": "SIRIUS",
+      "director": "SIRIUS",
+      "year": "2022",
+      "genre": "ROMCOM",
+      "actors": "EVERYONE",
+      "plot": "SCARY",
+      "rating": "5",
+      "poster": "https://m.media-amazon.com/images/M/MV5BNGMwNGI0NzAtY2U1Zi00MTI3LTk2NWQtMTU0ZmQ3OGZmMjc2XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY1200_CR86,0,630,1200_AL_.jpg",
+      "id": 255
     }
   ]
 }
