@@ -179,6 +179,13 @@
       "rating": 5,
       "comments": "This is a really good place for coding and eating",
       "id": 291
+    },
+    {
+      "restaurant_id": 1,
+      "name": "Friday the 13th",
+      "rating": 5,
+      "comments": "best slasher movie",
+      "id": 292
     }
   ]
 }
