@@ -179,6 +179,20 @@
       "rating": 5,
       "comments": "This is a really good place for coding and eating",
       "id": 291
+    },
+    {
+      "restaurant_id": 1,
+      "name": "Codey",
+      "rating": 5,
+      "comments": "This is a really good place for coding and eating",
+      "id": 292
+    },
+    {
+      "restaurant_id": 1,
+      "name": "Codey",
+      "rating": 5,
+      "comments": "This is a PRETTY OKAY place for coding and eating",
+      "id": 293
     }
   ]
 }
