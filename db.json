@@ -214,20 +214,6 @@
       "rating": 5,
       "comments": "This is a PRETTY OKAY place for coding and eating",
       "id": 296
-    },
-    {
-      "title": "90210",
-      "id": "90210",
-      "director": "someone",
-      "genre": "drama",
-      "rating": "1"
-    },
-    {
-      "title": "test",
-      "id": "1508",
-      "director": "a",
-      "genre": "b",
-      "rating": "2"
     }
   ]
 }
