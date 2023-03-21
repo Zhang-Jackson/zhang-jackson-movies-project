@@ -2,5 +2,5 @@
 *.iml
 
 node_modules/
-main.js
 *.map
+/js/keys.js
