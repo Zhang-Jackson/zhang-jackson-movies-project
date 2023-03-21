@@ -19,12 +19,12 @@ fetch(dbUrl).then(resp => resp.json())
     .then(data => {
         let html = '';
         for(let i=0; i <data.length; i++) {
-            html += `<div class="card">`
+            html += `<div class="card col-auto p-0">`
             html += `<div class="card-header">${data[i].title}</div>`
             html += `<div class="card-body">`
-            html += `${data[i].director}`
-            html += `${data[i].rating}`
-            html += `${data[i].genre}`
+            html += `<p><span>Director: </span>${data[i].director}</p>`
+            html += `<p><span>Rating: </span>${data[i].rating}</p>`
+            html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
             html += `</div>`//end of body
             html += `<div class="card-footer">`
             html += `<button class="btn btn-primary">Edit</button>`

@@ -14,13 +14,37 @@
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
   <!-- Bootstrap Css -->
   <link href="bootstrap-5.2.3-dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/styles.css" rel="stylesheet">
 </head>
 <body>
-<div class="title">Jackson & Zhang's Movie Warehouse</div>
-<div id="movieList" class="cards d-flex"></div>
-<from>
-  <input type="text" id="newMovie" placeholder="New Movie">
-</from>
+<main class="container">
+  <header class="row">
+    <h1 class="title">Jackson & Zhang's Movie Warehouse</h1>
+  </header>
+  <section class="row">
+    <div class="col-8 bg-light p-3">
+      <div id="movieList" class="cards row d-flex gap-3"></div>
+    </div>
+    <div class="col-4 bg-primary p-3">
+      <form>
+        <label for="addMovieName" class="text-light">Name of Movie</label>
+        <br>
+        <input type="text" id="addMovieName" class="input-group-text" value="Snakes on a Plane">
+        <br>
+        <label for="addMovieDirector" class="text-light">Movie Director</label>
+        <br>
+        <input type="text" id="addMovieDirector" class="input-group-text " value="David R Ellis">
+        <br>
+        <label for="addMovieRating" class="text-light">Your Rating</label>
+        <br>
+        <input type="text" id="addMovieRating" class="input-group-text" value="10">
+        <br>
+        <button id="btn-addMovie" class="btn btn-danger">Add Movie</button>
+      </form>
+    </div>
+  </section>
+</main>
+
 
 
 <!-- jQuery -->
