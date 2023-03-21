@@ -1,11 +1,11 @@
-const dbUrl = "https://productive-bristle-edam.glitch.me/movies"
+const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
 const searchUrl ="https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=Jack+Reacher"
 function setMovieList() {
-    console.log('hi');
+    $('#movieList').html("");
     fetch(dbUrl).then(resp => resp.json())
         .then(data => {
             let html = '';
-            for(let i=0; i <data.length; i++) {
+            for(let i = 0; i < data.length; i++) {
                 html += `<div class="card col-auto p-0">`
                 html += `<div class="card-header">${data[i].title}</div>`
                 html += `<div class="card-body">`
@@ -19,65 +19,85 @@ function setMovieList() {
                 html += `</div>`//end of footer
                 html += `</div>`//end of card
 
-                html += `<div class="modal fade" id="editModal${i}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel${i}" aria-hidden="true">`;
-                html +=`<div class="modal-dialog">`;
-                html +=`<div class="modal-content">`;
-                html +=`<div class="modal-header">`;
-                html +=`<p id="editModalLabel${i}" class="modal-title fs-5">Edit Movie</p>`;
-                html +=`<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
-                html +=`</div>`;//end of modal header
-
-                html +=`<div class="modal-body">`;
-                html +=`<form>`;
-                html +=`<label for="addMovieName" class="">Name of Movie</label>`;
-                html +=`<br>`;
-                html +=`<input type="text" id="addMovieName" class="input-group-text" value="${data[i].title}">`;
-                html +=`<br>`;
-                html +=`<label for="addMovieDirector" class="">Movie Director</label>`;
-                html +=`<br>`;
-                html +=`<input type="text" id="addMovieDirector" class="input-group-text " value="${data[i].director}">`;
-                html +=`<br>`;
-                html +=`<label for="addMovieRating" class="">Your Rating</label>`;
-                html +=`<br>`;
-                html +=`<input type="text" id="addMovieRating" class="input-group-text" value="${data[i].rating}"`;
-                html +=`<br>`;
-                html +=`</form>`;
-                html +=`</div>`;//end modal body
-
-                html +=`<div class="modal-footer">`;
-                html +=`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
-                html +=`<button type="button" class="btn btn-primary testEdits" id="btn-SubmitEdit${[i]}">Submit</button>`;
-                html +=` </div>`;//end of modal-footer
-                html +=` </div>`;//end of modal-content
-                html +=` </div>`;//end of modal-dialog
-                html +=` </div>`;//end of modal
-
-                submitEditsButtons.push(`#btn-SubmitEdit${[i]}`);
+                html += createModalHtml(data[i], i);
             }
             $('#movieList').append(html);
-            createSubmitEditsBtn()
+            createSubmitEditsBtn();
         })
+
 }
 
 function createSubmitEditsBtn(){
-    // for (let button of submitEditsButtons){
-    //     console.log(button);
-    //     let test = document.querySelector(`${button}`)
-    //     console.log(test);
-    //     test.click(function (e){
-    //         e.preventDefault();
-    //         console.log(button);
-    //     })
-    // }
-
     submitEditsButtons.forEach(function (button){
         let newButton = document.querySelector(button);
         newButton.addEventListener("click",editMovie);
     })
 }
 
+function createModalHtml(data, i){
+    let html ='';
+    html += `<div class="modal fade" id="editModal${i}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel${i}" aria-hidden="true">`;
+    html += `<div class="modal-dialog">`;
+    html += `<div class="modal-content">`;
+    html += `<div class="modal-header">`;
+    html += `<p id="editModalLabel${i}" class="modal-title fs-5">Edit Movie`;
+    html += `<span id="editMovieId-${i}" class="visually-hidden"> ${data.id}</span></p>`;
+    html += `<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+    html += `</div>`;//end of modal header
+
+    html += `<div class="modal-body">`;
+    html += `<form>`;
+    html += `<label for="editMovieName${i}" class="">Name of Movie</label>`;
+    html += `<br>`;
+    html += `<input type="text" id="editMovieName${i}" class="input-group-text" value="${data.title}">`;
+    html += `<br>`;
+    html += `<label for="editMovieDirector${i}" class="">Movie Director</label>`;
+    html += `<br>`;
+    html += `<input type="text" id="editMovieDirector${i}" class="input-group-text " value="${data.director}">`;
+    html += `<br>`;
+    html += `<label for="editMovieRating${i}" class="">Your Rating</label>`;
+    html += `<br>`;
+    html += `<input type="text" id="editMovieRating${i}" class="input-group-text" value="${data.rating}"`;
+    html += `<br>`;
+    html += `</form>`;
+    html += `</div>`;//end modal body
+
+    html += `<div class="modal-footer">`;
+    html += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
+    html += `<button type="button" class="btn btn-primary testEdits" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
+    html += `</div>`;//end of modal-footer
+    html += `</div>`;//end of modal-content
+    html += `</div>`;//end of modal-dialog
+    html += `</div>`;//end of modal
+
+    submitEditsButtons.push(`#btnSubmitEdit-${[i]}`);
+    return html;
+}
+
 function editMovie(e){
-    console.log(e.target.id);
+    let btn = (e.target.id).indexOf("-");
+    let btnId = (e.target.id).slice(btn + 1);
+
+    let movie = document.getElementById(`editMovieId-${btnId}`)
+    let movieId = movie.innerText;
+
+    let editTitle = document.getElementById(`editMovieName${btnId}`);
+    let editDirector = document.getElementById(`editMovieDirector${btnId}`);
+    let editRating = document.getElementById(`editMovieRating${btnId}`);
+
+    let editedMovie = {
+        title:editTitle.value,
+        director:editDirector.value,
+        rating:editRating.value
+    }
+
+    fetch(dbUrl + movieId, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editedMovie)
+    }).then(() => setMovieList())
 }
 
 let submitEditsButtons = [];
