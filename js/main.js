@@ -7,7 +7,6 @@ function getMovieListDbData() {
         })
         .finally(() => {
             hideLoading();
-        // Hide loading image in the finally block
         });
 }
 function sortByRatings(){
@@ -89,7 +88,9 @@ function makeMovieObject2(data){
 
 function setMovieList(data){
     userMovieList = [];
-    createMovieListArray(data);
+    setTimeout(() => {
+        createMovieListArray(data);
+    },1500)
 }
 
 function createButtons(btnArray, btnFunction){
@@ -260,7 +261,9 @@ function showLoading() {
 }
 
 function hideLoading() {
-    document.getElementById('loading').style.display = 'none';
+    setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+    },1500)
 }
 
 function createMovieListHtml(data){
