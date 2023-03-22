@@ -1,7 +1,18 @@
 .card{
     width: 250px;
+    height: 250px;
+}
+.card-header{
+    height: 35px;
 }
 
 .input-group-text{
     text-align: left;
+}
+.btn {
+    height: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

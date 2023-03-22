@@ -1,4 +1,4 @@
-const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
+const dbUrl = "https://fluffy-candied-bull.glitch.me/movies/"
 const searchUrl ="https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=Jack+Reacher"
 function setMovieList() {
     $('#movieList').html("");
@@ -6,8 +6,8 @@ function setMovieList() {
         .then(data => {
             let html = '';
             for(let i = 0; i < data.length; i++) {
-                html += `<div class="card col-auto p-0">`
-                html += `<div class="card-header">${data[i].title}</div>`
+                html += `<div class="card p-0 m-auto flex-wrap">`
+                html += `<h6 class="card-header text-center">${data[i].title}</h6>`
                 html += `<div class="card-body">`
                 html += `<p><span>Director: </span>${data[i].director}</p>`
                 html += `<p><span>Rating: </span>${data[i].rating}</p>`
@@ -22,15 +22,26 @@ function setMovieList() {
                 html += createModalHtml(data[i], i);
             }
             $('#movieList').append(html);
+            $('.card-header').each(function() {
+                const titleLength = $(this).text().length;
+                if(titleLength > 25) {
+                    $(this).css("font-size", "13px");
+                }
+            });
             createSubmitEditsBtn();
+            createDeleteBtn();
         })
-
 }
-
 function createSubmitEditsBtn(){
     submitEditsButtons.forEach(function (button){
         let newButton = document.querySelector(button);
         newButton.addEventListener("click",editMovie);
+    })
+}
+function createDeleteBtn(){
+    deleteButtons.forEach(function (button){
+        let deleteBtn = document.querySelector(button);
+        deleteBtn.addEventListener("click",deleteMovie);
     })
 }
 
@@ -57,12 +68,15 @@ function createModalHtml(data, i){
     html += `<br>`;
     html += `<label for="editMovieRating${i}" class="">Your Rating</label>`;
     html += `<br>`;
-    html += `<input type="text" id="editMovieRating${i}" class="input-group-text" value="${data.rating}"`;
+    html += `<input type="text" id="editMovieRating${i}" class="input-group-text" value="${data.rating}">`;
     html += `<br>`;
     html += `</form>`;
     html += `</div>`;//end modal body
 
     html += `<div class="modal-footer">`;
+    html += `<div class="me-auto">`
+    html += `<button type="button" class="btn btn-danger ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}">Delete</button>`;
+    html += `</div>`//end of deleteBtn
     html += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
     html += `<button type="button" class="btn btn-primary testEdits" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
     html += `</div>`;//end of modal-footer
@@ -71,7 +85,20 @@ function createModalHtml(data, i){
     html += `</div>`;//end of modal
 
     submitEditsButtons.push(`#btnSubmitEdit-${[i]}`);
+    deleteButtons.push(`#btnDelete-${[i]}`);
     return html;
+}
+
+function deleteMovie(e) {
+    let btn = e.target.id.split('-')[1]; // get the index of the button
+    let movieId = document.getElementById(`editMovieId-${btn}`).innerText.trim();
+
+    fetch(dbUrl + movieId, {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(() => setMovieList());
 }
 
 function editMovie(e){
@@ -97,9 +124,9 @@ function editMovie(e){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(editedMovie)
-    }).then(() => setMovieList())
+    }).then(() => setMovieList());
 }
-
+let deleteButtons = [];
 let submitEditsButtons = [];
 let addTitle = document.getElementById("addMovieName");
 let addDirector = document.getElementById('addMovieDirector');
