@@ -18,6 +18,7 @@ function setMovieList() {
 
                 html += `<div class="card-body pt-0 border">`;
                 html += `<p class=".movieTitle">${data[i].title}</p>`;
+                html += `<p>${data[i].title}</p>`;
                 //html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
                 html += `</div>`;
                 html += `</div>`;//end of card
@@ -67,6 +68,7 @@ function createModalHtml(data, i){
     html += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
     html += `<button type="button" class="btn btn-primary testEdits" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
     html += `</div>`;//end of modal-footer
+
     html += `</div>`;//end of modal-content
     html += `</div>`;//end of modal-dialog
     html += `</div>`;//end of modal
@@ -158,6 +160,7 @@ function addMovie(movieId, userRating){
         addRating.value = "";
     });
 }
+
 function getMovieObjectData(movieId, dbId, btnId){
     console.log(dbId);
     $.get(
@@ -199,7 +202,12 @@ function editMovie(e){
     console.log("db ID:");
     console.log(dbId);
     getMovieObjectData(movieId, dbId, btnId);
+
+    console.log("db ID:");
+    console.log(dbId);
+    getMovieObjectData(movieId, dbId, btnId);
 }
+
 function setMovieSearchHtml(movie){
     $.get(
         `https://api.themoviedb.org/3/search/movie?api_key=${movieKey}&query=${movie}`,
@@ -233,6 +241,7 @@ function setMovieSearchHtml(movie){
         createSelectMovieBtn();
     });
 }
+
 let deleteButtons = [];
 let submitEditsButtons = [];
 let selectMovieButtons = [];
@@ -243,3 +252,4 @@ const addMovieBtn = document.querySelector("#btn-addMovie");
 addMovieBtn.addEventListener("click", searchMovie);
 
 setMovieList();
+

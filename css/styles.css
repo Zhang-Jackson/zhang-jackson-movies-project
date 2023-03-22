@@ -1,10 +1,11 @@
 .card{
-    width: 250px;
+    width: 200px;
 }
 
 .input-group-text{
     text-align: left;
 }
+
 .avg-badge {
     background-color: #101e29;
     position: absolute;
