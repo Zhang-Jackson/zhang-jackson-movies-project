@@ -1,6 +1,15 @@
 const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
 const searchUrl ="https://api.themoviedb.org/3/search/movie?api_key={movieKey}&query=Jack+Reacher"
+function showLoading() {
+    document.getElementById('loading').style.display = 'block';
+}
+
+function hideLoading() {
+    document.getElementById('loading').style.display = 'none';
+}
+
 function setMovieList() {
+    showLoading();
     $('#movieList').html("");
     fetch(dbUrl).then(resp => resp.json())
         .then(data => {
@@ -34,6 +43,9 @@ function setMovieList() {
             createSubmitEditsBtn();
             createDeleteBtn();
         })
+        .finally(() => {
+            hideLoading(); // Hide loading image in the finally block
+        });
 }
 
 function createModalHtml(data, i){
@@ -84,7 +96,10 @@ function fetchThis(method, jsonObject, movieId){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(jsonObject)
-    }).then(() => setMovieList())
+    }).then(() => {
+        setMovieList();
+        hideLoading();
+    });
 }
 
 function createSubmitEditsBtn(){
@@ -108,13 +123,17 @@ function deleteMovie(e) {
 
     submitEditsButtons.splice(btn,1);
     deleteButtons.splice(btn,1);
-
+    showLoading()
     fetch(dbUrl + movieId, {
         method: "DELETE",
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(() => setMovieList());
+    }).then(() => {
+        setMovieList();
+        //hideLoading();
+    });
+
 }
 
 function createSelectMovieBtn(){
