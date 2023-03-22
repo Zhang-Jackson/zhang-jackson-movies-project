@@ -1,10 +1,15 @@
 function getMovieListDbData() {
+    showLoading();
     $('#movieList').html("");
     fetch(dbUrl).then(resp => resp.json())
         .then(data => {
             console.log("work");
             setMovieList(data)
         })
+        .finally(() => {
+            hideLoading();
+        // Hide loading image in the finally block
+        });
 }
 
 function setMovieList(data){
@@ -36,6 +41,7 @@ function fetchThis(method, jsonObject, movieId){
         }).then(() => {
             emptyButtonArrays();
             getMovieListDbData();
+            hideLoading();
         });
 
     } else {
@@ -48,6 +54,7 @@ function fetchThis(method, jsonObject, movieId){
         }).then(() => {
             emptyButtonArrays();
             getMovieListDbData();
+            hideLoading();
         });
     }
 }
@@ -180,6 +187,14 @@ function getMoviesWithImages(data){
         }
     }
     return hasImageArray;
+}
+
+function showLoading() {
+    document.getElementById('loading').style.display = 'block';
+}
+
+function hideLoading() {
+    document.getElementById('loading').style.display = 'none';
 }
 
 function createMovieListHtml(data){
