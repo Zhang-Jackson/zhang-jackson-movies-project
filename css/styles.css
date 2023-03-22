@@ -1,18 +1,27 @@
 .card{
     width: 250px;
-    height: 250px;
-}
-.card-header{
-    height: 35px;
 }
 
 .input-group-text{
     text-align: left;
 }
-.btn {
-    height: 30px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.avg-badge {
+    background-color: #101e29;
+    position: absolute;
+    font-size: 1rem;
+    top: 90%;
+    right: 75%;
+}
+.usr-badge {
+    background-color: deeppink;
+    position: absolute;
+    font-size: 1rem;
+    top: 90%;
+    left: 75%;
+}
+.btn-edit {
+    background-color: deeppink;
+    position: absolute;
+    top: 2%;
+    right: 2%;
 }

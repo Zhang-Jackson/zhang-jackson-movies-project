@@ -1,23 +1,26 @@
-const dbUrl = "https://fluffy-candied-bull.glitch.me/movies/"
-const searchUrl ="https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=Jack+Reacher"
+const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
+const searchUrl ="https://api.themoviedb.org/3/search/movie?api_key={movieKey}&query=Jack+Reacher"
 function setMovieList() {
     $('#movieList').html("");
     fetch(dbUrl).then(resp => resp.json())
         .then(data => {
             let html = '';
             for(let i = 0; i < data.length; i++) {
-                html += `<div class="card p-0 m-auto flex-wrap">`
-                html += `<h6 class="card-header text-center">${data[i].title}</h6>`
-                html += `<div class="card-body">`
-                html += `<p><span>Director: </span>${data[i].director}</p>`
-                html += `<p><span>Rating: </span>${data[i].rating}</p>`
+                let databaseRating = data[i].dbRating;
+                html += `<div class="card col-auto px-0">`;
+                html += `<div class="card-header p-0  img-fluid position-relative">`;
+                html += `<span class=" avg-badge badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
+                html += `<span class=" usr-badge badge rounded-pill">${data[i].rating}</span>`;
+                html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded-top img-fluid">`;
+                html += `<button type="button" class="btn btn-primary btn-edit" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
+                html += `Edit</button>`;
+                html += `</div>`;
+
+                html += `<div class="card-body pt-0 border">`;
+                html += `<p>${data[i].title}</p>`;
                 //html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
-                html += `</div>`//end of body
-                html += `<div class="card-footer">`
-                html += `<button type="button" class="btn btn-primary" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`
-                html += `Edit</button>`
-                html += `</div>`//end of footer
-                html += `</div>`//end of card
+                html += `</div>`;
+                html += `</div>`;//end of card
 
                 html += createModalHtml(data[i], i);
             }
@@ -32,43 +35,27 @@ function setMovieList() {
             createDeleteBtn();
         })
 }
-function createSubmitEditsBtn(){
-    submitEditsButtons.forEach(function (button){
-        let newButton = document.querySelector(button);
-        newButton.addEventListener("click",editMovie);
-    })
-}
-function createDeleteBtn(){
-    deleteButtons.forEach(function (button){
-        let deleteBtn = document.querySelector(button);
-        deleteBtn.addEventListener("click",deleteMovie);
-    })
-}
 
 function createModalHtml(data, i){
     let html ='';
     html += `<div class="modal fade" id="editModal${i}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel${i}" aria-hidden="true">`;
     html += `<div class="modal-dialog">`;
     html += `<div class="modal-content">`;
+
     html += `<div class="modal-header">`;
     html += `<p id="editModalLabel${i}" class="modal-title fs-5">Edit Movie`;
     html += `<span id="editMovieId-${i}" class="visually-hidden"> ${data.id}</span></p>`;
+    html += `<span id="editMovieDbId-${i}" class="visually-hidden"> ${data.dbId}</span></p>`;
     html += `<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
     html += `</div>`;//end of modal header
 
     html += `<div class="modal-body">`;
     html += `<form>`;
-    html += `<label for="editMovieName${i}" class="">Name of Movie</label>`;
-    html += `<br>`;
-    html += `<input type="text" id="editMovieName${i}" class="input-group-text" value="${data.title}">`;
-    html += `<br>`;
-    html += `<label for="editMovieDirector${i}" class="">Movie Director</label>`;
-    html += `<br>`;
-    html += `<input type="text" id="editMovieDirector${i}" class="input-group-text " value="${data.director}">`;
+    html += `<h2 id="editMovieName${i}">${data.title}</h2>`;
     html += `<br>`;
     html += `<label for="editMovieRating${i}" class="">Your Rating</label>`;
     html += `<br>`;
-    html += `<input type="text" id="editMovieRating${i}" class="input-group-text" value="${data.rating}">`;
+    html += `<input type="text" id="editMovieRating${i}" class="input-group-text" value="${data.rating}"`;
     html += `<br>`;
     html += `</form>`;
     html += `</div>`;//end modal body
@@ -89,6 +76,29 @@ function createModalHtml(data, i){
     return html;
 }
 
+function fetchThis(method, jsonObject, movieId){
+    fetch(dbUrl + movieId, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonObject)
+    }).then(() => setMovieList())
+}
+
+function createSubmitEditsBtn(){
+    submitEditsButtons.forEach(function (button){
+        let newButton = document.querySelector(button);
+        newButton.addEventListener("click",editMovie);
+    })
+}
+function createDeleteBtn(){
+    deleteButtons.forEach(function (button){
+        let deleteBtn = document.querySelector(button);
+        deleteBtn.addEventListener("click",deleteMovie);
+    })
+}
+
 function deleteMovie(e) {
     let btn = e.target.id.split('-')[1]; // get the index of the button
     let movieId = document.getElementById(`editMovieId-${btn}`).innerText.trim();
@@ -101,6 +111,81 @@ function deleteMovie(e) {
     }).then(() => setMovieList());
 }
 
+function createSelectMovieBtn(){
+    selectMovieButtons.forEach(function (button){
+        let newButton = document.querySelector(button);
+        newButton.addEventListener("click",selectMovie);
+    })
+}
+
+function searchMovie(e){
+    e.preventDefault();
+    setMovieSearchHtml(addTitle.value);
+}
+
+function selectMovie(e){
+    let btn = (e.target.id).indexOf("-");
+    let btnId = (e.target.id).slice(btn + 1);
+
+    let movie = document.getElementById(`selectMovieId-${btnId}`)
+    let movieId = movie.innerText;
+
+    let userRating = addRating.value;
+
+    console.log(movieId);
+    addMovie(movieId, userRating);
+    movieSearchDiv.innerHTML = "";
+}
+
+function addMovie(movieId, userRating){
+    $.get(
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${movieKey}`,
+        {}
+    ).done(function (data) {
+        console.log(data);
+
+        let newMovie = {
+            title:data.title,
+            rating:userRating,
+            poster:data.poster_path,
+            dbRating:data.vote_average,
+            dbId:data.id
+        }
+        console.log(newMovie);
+        fetchThis("POST", newMovie, "");
+
+        addTitle.value = "";
+        addRating.value = "";
+    });
+}
+function getMovieObjectData(movieId, dbId, btnId){
+    console.log(dbId);
+    $.get(
+        `https://api.themoviedb.org/3/movie/${dbId}?api_key=${movieKey}`,
+        {}
+    ).done(function (data) {
+        console.log("data");
+        console.log(data);
+        let movieObject = makeMovieObject(data);
+
+        let editRating = document.getElementById(`editMovieRating${btnId}`);
+        movieObject.rating = editRating.value;
+        console.log("weird");
+        console.log(movieObject);
+        fetchThis("PUT", movieObject, movieId);
+    });
+}
+
+function makeMovieObject(data){
+    return {
+        title: data.title,
+        poster: data.poster_path,
+        rating: 0,
+        dbRating: data.vote_average,
+        dbId: data.id
+    };
+}
+
 function editMovie(e){
     let btn = (e.target.id).indexOf("-");
     let btnId = (e.target.id).slice(btn + 1);
@@ -108,43 +193,53 @@ function editMovie(e){
     let movie = document.getElementById(`editMovieId-${btnId}`)
     let movieId = movie.innerText;
 
-    let editTitle = document.getElementById(`editMovieName${btnId}`);
-    let editDirector = document.getElementById(`editMovieDirector${btnId}`);
-    let editRating = document.getElementById(`editMovieRating${btnId}`);
+    let db = document.getElementById(`editMovieDbId-${btnId}`)
+    let dbId = db.innerText;
 
-    let editedMovie = {
-        title:editTitle.value,
-        director:editDirector.value,
-        rating:editRating.value
-    }
+    console.log("db ID:");
+    console.log(dbId);
+    getMovieObjectData(movieId, dbId, btnId);
+}
+function setMovieSearchHtml(movie){
+    $.get(
+        `https://api.themoviedb.org/3/search/movie?api_key=${movieKey}&query=${movie}`,
+        {}
+    ).done(function (data) {
+        console.log(data);
+        movieSearchDiv.innerHTML = "";
+        let html = "";
+        for (let i = 0; i < 10; i++){
+            html += `<div class="card col-auto p-0 mx-auto my-3 border-0">`
+            html += `<div class="card-header p-0 overflow-hidden">`
+            html += `<img src="https://image.tmdb.org/t/p/w300/${data.results[i].backdrop_path}" alt="movie"
+                        class="img-fluid">`
+            html += `</div>`//end of header
+            html += `<div class="card-body">`
+            html += `<p>${data.results[i].title}</p>`
+            html += `<p>${data.results[i].release_date}</p>`
+            html += `<p><span>Avg Rating: </span>${data.results[i].vote_average}</p>`
+            html += `<p id="selectMovieId-${i}">${data.results[i].id}</p>`
+            html += `</div>`//end of body
+            html += `<div class="card-footer">`
+            html += `<button type="button" class="btn btn-primary" id="btnSelect-${[i]}">`
+            html += `Select</button>`
+            html += `</div>`//end of footer
+            html += `</div>`//end of card
 
-    fetch(dbUrl + movieId, {
-        method: "PUT",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(editedMovie)
-    }).then(() => setMovieList());
+            selectMovieButtons.push(`#btnSelect-${[i]}`);
+        }
+
+        movieSearchDiv.innerHTML = html;
+        createSelectMovieBtn();
+    });
 }
 let deleteButtons = [];
 let submitEditsButtons = [];
+let selectMovieButtons = [];
 let addTitle = document.getElementById("addMovieName");
-let addDirector = document.getElementById('addMovieDirector');
 let addRating = document.getElementById('addMovieRating');
-const addMovieBtn = $('#btn-addMovie').click(function (e) {
-    e.preventDefault();
-    let newMovie = {
-        title:addTitle.value,
-        director:addDirector.value,
-        rating:addRating.value
-    }
-    console.log(newMovie);
-    fetch(dbUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body:JSON.stringify(newMovie),
-    }).then(() => setMovieList())
-})
+const movieSearchDiv = document.getElementById("movieSearchDiv");
+const addMovieBtn = document.querySelector("#btn-addMovie");
+addMovieBtn.addEventListener("click", searchMovie);
+
 setMovieList();
