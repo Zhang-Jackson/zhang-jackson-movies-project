@@ -8,23 +8,24 @@ function getMovieListDbData() {
         })
         .finally(() => {
             hideLoading();
-        // Hide loading image in the finally block
         });
 }
 
 function setMovieList(data){
     let html = createMovieListHtml(data);
-    $('#movieList').append(html);
+    setTimeout(() =>{
+        $('#movieList').append(html);
 
-    $('.movieTitle').each(function() {
-        const titleLength = $(this).text().length;
-        if(titleLength > 25) {
-            $(this).css("font-size", "13px");
-        }
-    });
-    console.log(`submit buttons: ${editSubmitBtns}`);
-    createButtons(editSubmitBtns, editMovie);
-    createButtons(editDeleteBtns, deleteMovie);
+        $('.movieTitle').each(function() {
+            const titleLength = $(this).text().length;
+            if(titleLength > 23) {
+                $(this).css("font-size", "13px");
+            }
+        });
+        console.log(`submit buttons: ${editSubmitBtns}`);
+        createButtons(editSubmitBtns, editMovie);
+        createButtons(editDeleteBtns, deleteMovie);
+    },1500)
 }
 
 function createButtons(btnArray, btnFunction){
@@ -43,7 +44,6 @@ function fetchThis(method, jsonObject, movieId){
             getMovieListDbData();
             hideLoading();
         });
-
     } else {
         fetch(dbUrl + movieId, {
             method: method,
@@ -65,7 +65,6 @@ function addMovie(movieId, userRating){
         {}
     ).done(function (data) {
         console.log(data);
-
         let newMovie = {
             title:data.title,
             rating:userRating,
@@ -194,7 +193,9 @@ function showLoading() {
 }
 
 function hideLoading() {
-    document.getElementById('loading').style.display = 'none';
+    setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+    }, 1500);
 }
 
 function createMovieListHtml(data){
