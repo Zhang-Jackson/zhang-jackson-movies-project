@@ -3,7 +3,6 @@ function getMovieListDbData() {
     $('#movieList').html("");
     fetch(dbUrl).then(resp => resp.json())
         .then(data => {
-            console.log("work");
             setMovieList(data)
         })
         .finally(() => {
@@ -11,10 +10,50 @@ function getMovieListDbData() {
         // Hide loading image in the finally block
         });
 }
+function sortByRatings(){
+    console.log(selectSortType.value);
+    switch (selectSortType.value){
+        case '1': //rating low to high
+            userMovieList.sort(
+                (a, b) => (parseInt(a.dbRating) > parseInt(b.dbRating)) ? 1 : (parseInt(a.dbRating) < parseInt(b.dbRating) ? -1 : 0)
+            );
+            sortMe();
+            break;
+        case '2': //rating high to low
+            console.log(userMovieList);
+            userMovieList.sort(
+                (a, b) => (parseInt(a.dbRating) < parseInt(b.dbRating)) ? 1 : (parseInt(a.dbRating) > parseInt(b.dbRating) ? -1 : 0)
+            );
+            console.log(userMovieList);
+            sortMe();
+            break;
+        case '3': // sort alpa a-Z
+            userMovieList.sort(
+                (a, b) => ((a.title) > (b.title)) ? 1 : ((a.title) < (b.title) ? -1 : 0)
+            );
+            sortMe();
+            break;
+        case '4': //sort alpha z-a
+            userMovieList.sort(
+                (a, b) => ((a.title) < (b.title)) ? 1 : ((a.title) > (b.title) ? -1 : 0)
+            );
+            sortMe();
+            break;
+        default: //sort by id low to high
+            userMovieList.sort(
+                (a, b) => (parseInt(a.id) > parseInt(b.id)) ? 1 : (parseInt(a.id) < parseInt(b.id) ? -1 : 0)
+            );
+            sortMe();
+            break;
+    }
 
-function setMovieList(data){
-    let html = createMovieListHtml(data);
-    $('#movieList').append(html);
+}
+
+function sortMe(){
+    emptyButtonArrays();
+    let html = "";
+    html = createMovieListHtml(userMovieList);
+    $('#movieList').html(html);
 
     $('.movieTitle').each(function() {
         const titleLength = $(this).text().length;
@@ -22,9 +61,35 @@ function setMovieList(data){
             $(this).css("font-size", "13px");
         }
     });
+
     console.log(`submit buttons: ${editSubmitBtns}`);
     createButtons(editSubmitBtns, editMovie);
     createButtons(editDeleteBtns, deleteMovie);
+}
+
+function createMovieListArray(data){
+    for(let movie of data){
+        userMovieList.push(makeMovieObject2(movie));
+    }
+    sortMe();
+    console.log("called");
+    console.log(userMovieList);
+}
+
+function makeMovieObject2(data){
+    return {
+        title: data.title,
+        poster: data.poster,
+        rating: data.rating,
+        dbRating: data.dbRating,
+        dbId: data.dbId,
+        id: data.id
+    };
+}
+
+function setMovieList(data){
+    userMovieList = [];
+    createMovieListArray(data);
 }
 
 function createButtons(btnArray, btnFunction){
@@ -35,6 +100,7 @@ function createButtons(btnArray, btnFunction){
 }
 
 function fetchThis(method, jsonObject, movieId){
+    showLoading();
     if(method === 'DELETE'){
         fetch(dbUrl + movieId, {
             method: method,
@@ -190,7 +256,7 @@ function getMoviesWithImages(data){
 }
 
 function showLoading() {
-    document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading').style.display = 'block';
 }
 
 function hideLoading() {
@@ -300,11 +366,15 @@ let userMovieList = [];
 let editDeleteBtns = [];
 let editSubmitBtns = [];
 let selectMovieBtns = [];
+
 let addTitle = document.getElementById("addMovieName");
 let addRating = document.getElementById('addMovieRating');
 const movieSearchDiv = document.getElementById("movieSearchDiv");
 const searchMovieBtn = document.querySelector("#btn-addMovie");
+const selectSortType = document.querySelector("#select-sort")
+
 searchMovieBtn.addEventListener("click", searchMovie);
+selectSortType.addEventListener("change", sortByRatings);
 
 getMovieListDbData();
 
