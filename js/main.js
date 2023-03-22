@@ -1,39 +1,209 @@
-const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
-const searchUrl ="https://api.themoviedb.org/3/search/movie?api_key={movieKey}&query=Jack+Reacher"
-function setMovieList() {
+function getMovieListDbData() {
     $('#movieList').html("");
     fetch(dbUrl).then(resp => resp.json())
         .then(data => {
-            let html = '';
-            for(let i = 0; i < data.length; i++) {
-                let databaseRating = data[i].dbRating;
-                html += `<div class="card col-auto px-0">`;
-                html += `<div class="card-header p-0  img-fluid position-relative">`;
-                html += `<span class=" avg-badge badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
-                html += `<span class=" usr-badge badge rounded-pill">${data[i].rating}</span>`;
-                html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded-top img-fluid">`;
-                html += `<button type="button" class="btn btn-primary rounded-circle btn-edit p-2" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
-                html += `<img src="/assets/pencil.svg" alt="edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
-                html += `</div>`;
-
-                html += `<div class="card-body pt-0 border">`;
-                html += `<p class="movieTitle text-center">${data[i].title}</p>`;
-                //html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
-                html += `</div>`;
-                html += `</div>`;//end of card
-
-                html += createModalHtml(data[i], i);
-            }
-            $('#movieList').append(html);
-            $('.movieTitle').each(function() {
-                const titleLength = $(this).text().length;
-                if(titleLength > 25) {
-                    $(this).css("font-size", "13px");
-                }
-            });
-            createSubmitEditsBtn();
-            createDeleteBtn();
+            console.log("work");
+            setMovieList(data)
         })
+}
+
+function setMovieList(data){
+    let html = createMovieListHtml(data);
+    $('#movieList').append(html);
+
+    $('.movieTitle').each(function() {
+        const titleLength = $(this).text().length;
+        if(titleLength > 25) {
+            $(this).css("font-size", "13px");
+        }
+    });
+    console.log(`submit buttons: ${editSubmitBtns}`);
+    createButtons(editSubmitBtns, editMovie);
+    createButtons(editDeleteBtns, deleteMovie);
+}
+
+function createButtons(btnArray, btnFunction){
+    for(let button of btnArray){
+        let newButton = document.querySelector(button);
+        newButton.addEventListener("click",btnFunction);
+    }
+}
+
+function fetchThis(method, jsonObject, movieId){
+    if(method === 'DELETE'){
+        fetch(dbUrl + movieId, {
+            method: method,
+        }).then(() => {
+            emptyButtonArrays();
+            getMovieListDbData();
+        });
+
+    } else {
+        fetch(dbUrl + movieId, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObject)
+        }).then(() => {
+            emptyButtonArrays();
+            getMovieListDbData();
+        });
+    }
+}
+
+function addMovie(movieId, userRating){
+    $.get(
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${movieKey}`,
+        {}
+    ).done(function (data) {
+        console.log(data);
+
+        let newMovie = {
+            title:data.title,
+            rating:userRating,
+            poster:data.poster_path,
+            dbRating:data.vote_average,
+            dbId:data.id
+        }
+
+        if(userRating >= 1 && userRating <= 10){
+            newMovie.rating = userRating;
+        } else {
+            newMovie.rating = "N/A";
+        }
+
+        fetchThis("POST", newMovie, "");
+
+        addTitle.value = "";
+        addRating.value = "";
+    });
+}
+
+function emptyButtonArrays(){
+    editSubmitBtns = [];
+    editDeleteBtns = [];
+    selectMovieBtns = [];
+}
+
+function deleteMovie(e) {
+    e.preventDefault();
+    let btn = (e.target.id).indexOf("-");
+    let btnId = (e.target.id).slice(btn + 1);
+
+    let movie = document.getElementById(`editMovieId-${btnId}`)
+    let movieId = movie.innerText;
+
+    fetchThis("DELETE",null,movieId)
+}
+
+function searchMovie(e){
+    e.preventDefault();
+    searchTheMovieDB(addTitle.value);
+}
+
+function selectMovie(e){
+    let btn = (e.target.id).indexOf("-");
+    let btnId = (e.target.id).slice(btn + 1);
+
+    let db = document.getElementById(`selectMovieId-${btnId}`)
+    let dbId = db.innerText;
+
+    let userRating = addRating.value;
+
+    console.log(`Db id: ${dbId}`);
+    addMovie(dbId, userRating);
+    movieSearchDiv.innerHTML = "";
+}
+
+function editMovie(e){
+    let btn = (e.target.id).indexOf("-");
+    let btnId = (e.target.id).slice(btn + 1);
+
+    let movie = document.getElementById(`editMovieId-${btnId}`)
+    let movieId = movie.innerText;
+
+    let db = document.getElementById(`editMovieDbId-${btnId}`)
+    let dbId = db.innerText;
+
+    console.log("db ID:");
+    console.log(dbId);
+    getMovieObjectData(movieId, dbId, btnId);
+}
+
+function getMovieObjectData(movieId, dbId, btnId){
+    $.get(
+        `https://api.themoviedb.org/3/movie/${dbId}?api_key=${movieKey}`,
+        {}
+    ).done(function (data) {
+        console.log(data);
+        let movieObject = makeMovieObject(data);
+
+        let editRating = document.getElementById(`editMovieRating${btnId}`);
+
+        let userRating = editRating.value;
+        if(userRating >= 1 && userRating <= 10){
+            movieObject.rating = userRating;
+        } else {
+            movieObject.rating = "N/A";
+        }
+
+        fetchThis("PUT", movieObject, movieId);
+    });
+}
+
+function makeMovieObject(data){
+    return {
+        title: data.title,
+        poster: data.poster_path,
+        rating: 0,
+        dbRating: data.vote_average,
+        dbId: data.id
+    };
+}
+
+function searchTheMovieDB(movie){
+    $.get(
+        `https://api.themoviedb.org/3/search/movie?api_key=${movieKey}&query=${movie}`,
+        {}
+    ).done(function (data) {
+        createMovieSearchHtml(data);
+    });
+}
+function getMoviesWithImages(data){
+    let hasImageArray=[];
+    for (let i = 0; i < data.results.length; i++){
+        let dbImage = data.results[i].backdrop_path;
+        if (!dbImage){
+        }else{
+            hasImageArray.push(i);
+        }
+    }
+    return hasImageArray;
+}
+
+function createMovieListHtml(data){
+    let html = '';
+    for(let i = 0; i < data.length; i++) {
+        let databaseRating = data[i].dbRating;
+        html += `<div class="card col-auto px-0">`;
+        html += `<div class="card-header p-0  img-fluid position-relative">`;
+        html += `<span class=" avg-badge badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
+        html += `<span class=" usr-badge badge rounded-pill">${data[i].rating}</span>`;
+        html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded-top img-fluid">`;
+        html += `<button type="button" class="btn btn-primary rounded-circle btn-edit p-2" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
+        html += `<img src="/assets/pencil.svg" alt="edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
+        html += `</div>`;
+
+        html += `<div class="card-body pt-0 border">`;
+        html += `<p class="movieTitle text-center">${data[i].title}</p>`;
+        //html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
+        html += `</div>`;
+        html += `</div>`;//end of card
+
+        html += createModalHtml(data[i], i);
+    }
+    return html;
 }
 
 function createModalHtml(data, i){
@@ -72,172 +242,17 @@ function createModalHtml(data, i){
     html += `</div>`;//end of modal-dialog
     html += `</div>`;//end of modal
 
-    submitEditsButtons.push(`#btnSubmitEdit-${[i]}`);
-    deleteButtons.push(`#btnDelete-${[i]}`);
+    editSubmitBtns.push(`#btnSubmitEdit-${[i]}`);
+    editDeleteBtns.push(`#btnDelete-${[i]}`);
     return html;
 }
 
-function fetchThis(method, jsonObject, movieId){
-    fetch(dbUrl + movieId, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonObject)
-    }).then(() => setMovieList())
-}
-
-function createSubmitEditsBtn(){
-    submitEditsButtons.forEach(function (button){
-        let newButton = document.querySelector(button);
-        newButton.addEventListener("click",editMovie);
-    })
-}
-function createDeleteBtn(){
-    deleteButtons.forEach(function (button){
-        let deleteBtn = document.querySelector(button);
-        deleteBtn.addEventListener("click",deleteMovie);
-    })
-}
-
-function deleteMovie(e) {
-    let btn = e.target.id.split('-')[1]; // get the index of the button
-    let movieId = document.getElementById(`editMovieId-${btn}`).innerText.trim();
-
-    console.log(btn);
-
-    submitEditsButtons.splice(btn,1);
-    deleteButtons.splice(btn,1);
-
-    fetch(dbUrl + movieId, {
-        method: "DELETE",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(() => setMovieList());
-}
-
-function createSelectMovieBtn(){
-    selectMovieButtons.forEach(function (button){
-        let newButton = document.querySelector(button);
-        newButton.addEventListener("click",selectMovie);
-    })
-}
-
-function searchMovie(e){
-    e.preventDefault();
-    setMovieSearchHtml(addTitle.value);
-}
-
-function selectMovie(e){
-    let btn = (e.target.id).indexOf("-");
-    let btnId = (e.target.id).slice(btn + 1);
-
-    let movie = document.getElementById(`selectMovieId-${btnId}`)
-    let movieId = movie.innerText;
-
-    let userRating = addRating.value;
-
-    console.log(movieId);
-    addMovie(movieId, userRating);
-    movieSearchDiv.innerHTML = "";
-}
-
-function addMovie(movieId, userRating){
-    $.get(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${movieKey}`,
-        {}
-    ).done(function (data) {
-        console.log(data);
-
-        let newMovie = {
-            title:data.title,
-            rating:userRating,
-            poster:data.poster_path,
-            dbRating:data.vote_average,
-            dbId:data.id
-        }
-
-        if(userRating >= 1 && userRating <= 10){
-            newMovie.rating = userRating;
-        } else {
-            newMovie.rating = "N/A";
-        }
-
-        fetchThis("POST", newMovie, "");
-
-        addTitle.value = "";
-        addRating.value = "";
-    });
-}
-
-function getMovieObjectData(movieId, dbId, btnId){
-    $.get(
-        `https://api.themoviedb.org/3/movie/${dbId}?api_key=${movieKey}`,
-        {}
-    ).done(function (data) {
-        console.log(data);
-        let movieObject = makeMovieObject(data);
-
-        let editRating = document.getElementById(`editMovieRating${btnId}`);
-
-        let userRating = editRating.value;
-        if(userRating >= 1 && userRating <= 10){
-            movieObject.rating = userRating;
-        } else {
-            movieObject.rating = "N/A";
-        }
-
-        fetchThis("PUT", movieObject, movieId);
-    });
-}
-
-function makeMovieObject(data){
-    return {
-        title: data.title,
-        poster: data.poster_path,
-        rating: 0,
-        dbRating: data.vote_average,
-        dbId: data.id
-    };
-}
-
-function editMovie(e){
-    let btn = (e.target.id).indexOf("-");
-    let btnId = (e.target.id).slice(btn + 1);
-
-    let movie = document.getElementById(`editMovieId-${btnId}`)
-    let movieId = movie.innerText;
-
-    let db = document.getElementById(`editMovieDbId-${btnId}`)
-    let dbId = db.innerText;
-
-    console.log("db ID:");
-    console.log(dbId);
-    getMovieObjectData(movieId, dbId, btnId);
-}
-
-function setMovieSearchHtml(movie){
-    $.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=${movieKey}&query=${movie}`,
-        {}
-    ).done(function (data) {
-        movieSearchDiv.innerHTML = "";
-
-        let hasImageArray=[];
-        for (let i = 0; i < data.results.length; i++){
-            let dbImage = data.results[i].backdrop_path;
-            if (!dbImage){
-            }else{
-                hasImageArray.push(i);
-            }
-        }
-
-        let numberOfDisplayedMovies = 10;
-        if (hasImageArray.length < numberOfDisplayedMovies){
-            numberOfDisplayedMovies = hasImageArray.length;
-        }
-
+function createMovieSearchHtml(data){
+    let hasImageArray = getMoviesWithImages(data);
+    let numberOfDisplayedMovies = 10;
+    if (hasImageArray.length < numberOfDisplayedMovies){
+        numberOfDisplayedMovies = hasImageArray.length;
+    }
         let html = "";
         for (let i = 0; i < numberOfDisplayedMovies; i++){
 
@@ -258,22 +273,23 @@ function setMovieSearchHtml(movie){
             html += `</div>`//end of footer
             html += `</div>`//end of card
 
-            selectMovieButtons.push(`#btnSelect-${[i]}`);
+            selectMovieBtns.push(`#btnSelect-${[i]}`);
         }
 
         movieSearchDiv.innerHTML = html;
-        createSelectMovieBtn();
-    });
+        createButtons(selectMovieBtns, selectMovie);
 }
 
-let deleteButtons = [];
-let submitEditsButtons = [];
-let selectMovieButtons = [];
+const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
+let userMovieList = [];
+let editDeleteBtns = [];
+let editSubmitBtns = [];
+let selectMovieBtns = [];
 let addTitle = document.getElementById("addMovieName");
 let addRating = document.getElementById('addMovieRating');
 const movieSearchDiv = document.getElementById("movieSearchDiv");
-const addMovieBtn = document.querySelector("#btn-addMovie");
-addMovieBtn.addEventListener("click", searchMovie);
+const searchMovieBtn = document.querySelector("#btn-addMovie");
+searchMovieBtn.addEventListener("click", searchMovie);
 
-setMovieList();
+getMovieListDbData();
 
