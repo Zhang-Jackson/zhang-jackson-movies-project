@@ -64,6 +64,7 @@ function sortMe(){
     console.log(`submit buttons: ${editSubmitBtns}`);
     createButtons(editSubmitBtns, editMovie);
     createButtons(editDeleteBtns, deleteMovie);
+    createButtons(cardList, cardThing);
 }
 
 function createMovieListArray(data){
@@ -82,7 +83,11 @@ function makeMovieObject2(data){
         rating: data.rating,
         dbRating: data.dbRating,
         dbId: data.dbId,
-        id: data.id
+        id: data.id,
+        genres: data.genres,
+        runtime: data.runtime,
+        release: data.release,
+        overview: data.overview
     };
 }
 
@@ -133,13 +138,16 @@ function addMovie(movieId, userRating){
     ).done(function (data) {
         console.log(data);
 
-        let newMovie = {
+        /*let newMovie = {
             title:data.title,
             rating:userRating,
             poster:data.poster_path,
             dbRating:data.vote_average,
             dbId:data.id
         }
+         */
+
+        let newMovie = makeMovieObject(data);
 
         if(userRating >= 1 && userRating <= 10){
             newMovie.rating = userRating;
@@ -158,6 +166,7 @@ function emptyButtonArrays(){
     editSubmitBtns = [];
     editDeleteBtns = [];
     selectMovieBtns = [];
+    cardList = [];
 }
 
 function deleteMovie(e) {
@@ -188,6 +197,17 @@ function selectMovie(e){
     console.log(`Db id: ${dbId}`);
     addMovie(dbId, userRating);
     movieSearchDiv.innerHTML = "";
+}
+
+function cardThing(e){
+    let btn = (e.target.id).indexOf("-");
+    let btnId = (e.target.id).slice(btn + 1);
+
+
+    let clickedItem = document.getElementById(`card-${btnId}`)
+    console.log(clickedItem);
+
+    //let dbId = db.innerText;
 }
 
 function editMovie(e){
@@ -227,12 +247,21 @@ function getMovieObjectData(movieId, dbId, btnId){
 }
 
 function makeMovieObject(data){
+    let genreArray = [];
+    for(let genre of data.genres){
+        console.log(`Genre: ${genre.name}`);
+        genreArray.push(genre.name);
+    }
     return {
         title: data.title,
         poster: data.poster_path,
         rating: 0,
         dbRating: data.vote_average,
-        dbId: data.id
+        dbId: data.id,
+        genres: genreArray,
+        runtime: data.runtime,
+        release: data.release_date,
+        overview: data.overview
     };
 }
 
@@ -270,11 +299,11 @@ function createMovieListHtml(data){
     let html = '';
     for(let i = 0; i < data.length; i++) {
         let databaseRating = data[i].dbRating;
-        html += `<div class="card col-auto px-0">`;
+        html += `<div class="card col-auto px-0" id="card-${[i]}">`;
         html += `<div class="card-header p-0  img-fluid position-relative">`;
         html += `<span class=" avg-badge badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
         html += `<span class=" usr-badge badge rounded-pill">${data[i].rating}</span>`;
-        html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded-top img-fluid">`;
+        html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded-top img-fluid" id="image-${[i]}">`;
         html += `<button type="button" class="btn btn-primary rounded-circle btn-edit p-2" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
         html += `<img src="/assets/pencil.svg" alt="edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
         html += `</div>`;
@@ -286,7 +315,10 @@ function createMovieListHtml(data){
         html += `</div>`;//end of card
 
         html += createModalHtml(data[i], i);
+        cardList.push(`#card-${[i]}`);
     }
+
+    console.log(cardList);
     return html;
 }
 
@@ -360,8 +392,8 @@ function createMovieSearchHtml(data){
             selectMovieBtns.push(`#btnSelect-${[i]}`);
         }
 
-        movieSearchDiv.innerHTML = html;
-        createButtons(selectMovieBtns, selectMovie);
+    movieSearchDiv.innerHTML = html;
+    createButtons(selectMovieBtns, selectMovie);
 }
 
 const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
@@ -369,6 +401,7 @@ let userMovieList = [];
 let editDeleteBtns = [];
 let editSubmitBtns = [];
 let selectMovieBtns = [];
+let cardList = [];
 
 let addTitle = document.getElementById("addMovieName");
 let addRating = document.getElementById('addMovieRating');
