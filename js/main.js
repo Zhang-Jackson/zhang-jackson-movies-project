@@ -12,13 +12,12 @@ function setMovieList() {
                 html += `<span class=" avg-badge badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
                 html += `<span class=" usr-badge badge rounded-pill">${data[i].rating}</span>`;
                 html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded-top img-fluid">`;
-                html += `<button type="button" class="btn btn-primary btn-edit" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
-                html += `Edit</button>`;
+                html += `<button type="button" class="btn btn-primary rounded-circle btn-edit p-2" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
+                html += `<img src="/assets/pencil.svg" alt="edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
                 html += `</div>`;
 
                 html += `<div class="card-body pt-0 border">`;
-                html += `<p class=".movieTitle">${data[i].title}</p>`;
-                html += `<p>${data[i].title}</p>`;
+                html += `<p class="movieTitle text-center">${data[i].title}</p>`;
                 //html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
                 html += `</div>`;
                 html += `</div>`;//end of card
@@ -63,7 +62,7 @@ function createModalHtml(data, i){
 
     html += `<div class="modal-footer">`;
     html += `<div class="me-auto">`
-    html += `<button type="button" class="btn btn-danger ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}">Delete</button>`;
+    html += `<button type="button" class="btn btn-danger ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}" data-bs-dismiss="modal">Delete</button>`;
     html += `</div>`//end of deleteBtn
     html += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
     html += `<button type="button" class="btn btn-primary testEdits" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
@@ -104,6 +103,11 @@ function createDeleteBtn(){
 function deleteMovie(e) {
     let btn = e.target.id.split('-')[1]; // get the index of the button
     let movieId = document.getElementById(`editMovieId-${btn}`).innerText.trim();
+
+    console.log(btn);
+
+    submitEditsButtons.splice(btn,1);
+    deleteButtons.splice(btn,1);
 
     fetch(dbUrl + movieId, {
         method: "DELETE",
@@ -153,7 +157,13 @@ function addMovie(movieId, userRating){
             dbRating:data.vote_average,
             dbId:data.id
         }
-        console.log(newMovie);
+
+        if(userRating >= 1 && userRating <= 10){
+            newMovie.rating = userRating;
+        } else {
+            newMovie.rating = "N/A";
+        }
+
         fetchThis("POST", newMovie, "");
 
         addTitle.value = "";
@@ -162,19 +172,22 @@ function addMovie(movieId, userRating){
 }
 
 function getMovieObjectData(movieId, dbId, btnId){
-    console.log(dbId);
     $.get(
         `https://api.themoviedb.org/3/movie/${dbId}?api_key=${movieKey}`,
         {}
     ).done(function (data) {
-        console.log("data");
         console.log(data);
         let movieObject = makeMovieObject(data);
 
         let editRating = document.getElementById(`editMovieRating${btnId}`);
-        movieObject.rating = editRating.value;
-        console.log("weird");
-        console.log(movieObject);
+
+        let userRating = editRating.value;
+        if(userRating >= 1 && userRating <= 10){
+            movieObject.rating = userRating;
+        } else {
+            movieObject.rating = "N/A";
+        }
+
         fetchThis("PUT", movieObject, movieId);
     });
 }
@@ -202,10 +215,6 @@ function editMovie(e){
     console.log("db ID:");
     console.log(dbId);
     getMovieObjectData(movieId, dbId, btnId);
-
-    console.log("db ID:");
-    console.log(dbId);
-    getMovieObjectData(movieId, dbId, btnId);
 }
 
 function setMovieSearchHtml(movie){
@@ -213,20 +222,35 @@ function setMovieSearchHtml(movie){
         `https://api.themoviedb.org/3/search/movie?api_key=${movieKey}&query=${movie}`,
         {}
     ).done(function (data) {
-        console.log(data);
         movieSearchDiv.innerHTML = "";
+
+        let hasImageArray=[];
+        for (let i = 0; i < data.results.length; i++){
+            let dbImage = data.results[i].backdrop_path;
+            if (!dbImage){
+            }else{
+                hasImageArray.push(i);
+            }
+        }
+
+        let numberOfDisplayedMovies = 10;
+        if (hasImageArray.length < numberOfDisplayedMovies){
+            numberOfDisplayedMovies = hasImageArray.length;
+        }
+
         let html = "";
-        for (let i = 0; i < 10; i++){
+        for (let i = 0; i < numberOfDisplayedMovies; i++){
+
             html += `<div class="card col-auto p-0 mx-auto my-3 border-0">`
             html += `<div class="card-header p-0 overflow-hidden">`
-            html += `<img src="https://image.tmdb.org/t/p/w300/${data.results[i].backdrop_path}" alt="movie"
+            html += `<img src="https://image.tmdb.org/t/p/w300/${data.results[(hasImageArray[i])].backdrop_path}" alt="movie"
                         class="img-fluid">`
             html += `</div>`//end of header
             html += `<div class="card-body">`
-            html += `<p>${data.results[i].title}</p>`
-            html += `<p>${data.results[i].release_date}</p>`
-            html += `<p><span>Avg Rating: </span>${data.results[i].vote_average}</p>`
-            html += `<p id="selectMovieId-${i}">${data.results[i].id}</p>`
+            html += `<p>${data.results[(hasImageArray[i])].title}</p>`
+            html += `<p>${data.results[(hasImageArray[i])].release_date}</p>`
+            html += `<p><span>Avg Rating: </span>${data.results[(hasImageArray[i])].vote_average}</p>`
+            html += `<p id="selectMovieId-${i}">${data.results[(hasImageArray[i])].id}</p>`
             html += `</div>`//end of body
             html += `<div class="card-footer">`
             html += `<button type="button" class="btn btn-primary" id="btnSelect-${[i]}">`
