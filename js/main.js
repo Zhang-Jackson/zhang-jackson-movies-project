@@ -17,7 +17,7 @@ function setMovieList() {
                 html += `</div>`;
 
                 html += `<div class="card-body pt-0 border">`;
-                html += `<p>${data[i].title}</p>`;
+                html += `<p class=".movieTitle">${data[i].title}</p>`;
                 //html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
                 html += `</div>`;
                 html += `</div>`;//end of card
@@ -25,7 +25,7 @@ function setMovieList() {
                 html += createModalHtml(data[i], i);
             }
             $('#movieList').append(html);
-            $('.card-header').each(function() {
+            $('.movieTitle').each(function() {
                 const titleLength = $(this).text().length;
                 if(titleLength > 25) {
                     $(this).css("font-size", "13px");
