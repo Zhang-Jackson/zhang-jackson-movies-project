@@ -4,28 +4,14 @@
     --color-accent-shadow: #4d0314;
     --color-primary-dark: #0d1a26
 }
+
 *{
     font-family: 'Metrophobic', sans-serif;
 }
+
 header{
     background-image: url("/img/title-bg.png");
     height: 150px;
-}
-.card{
-    width: 200px;
-    height: 300px;
-    filter: drop-shadow(0 10px 5px var(--color-accent-shadow));
-    transition: all 200ms ease-in;
-}
-
-.card:hover{
-    outline: var(--color-accent-normal) 3px solid;
-    scale: 103%;
-}
-
-.searchedCards{
-    width: 250px;
-    height: 200px;
 }
 
 body {
@@ -33,54 +19,11 @@ body {
     background-color: var(--color-primary-dark);
 }
 
-.input-group-text{
-    text-align: left;
-}
-
-.avg-badge {
-    background-color: var(--color-primary-dark);
-    position: absolute;
-    font-size: 1rem;
-    top: 85%;
-    right: 75%;
-}
-.usr-badge {
-    background-color: var(--color-accent-normal);
-    position: absolute;
-    font-size: 1rem;
-    top: 85%;
-    left: 75%;
-}
-.search-badge {
-    background-color: var(--color-accent-normal);
-    position: absolute;
-    font-size: 1rem;
-    top: 70%;
-    right: 2%;
-}
-.btn-edit {
-    background-color: var(--color-accent-normal);
-    position: absolute;
-    top: 2%;
-    right: 2%;
-}
-.btn-edit:hover {
-    background-color: var(--color-accent-dark);
-}
-.hidden {
-    display: none;
-}
-.movieTitle {
-    font-size: 1.25rem;
-    line-height: 1;
-    font-weight: bold;
-}
-
-.notSelectable{
-    user-select: none;
-    user-focus: none;
-}
-
+/*
+//////////////////////////////////////////////////
+Utility Classes
+//////////////////////////////////////////////////
+ */
 .bg-accent-normal {
     background-color: var(--color-accent-normal);
 }
@@ -104,11 +47,79 @@ body {
 .color-primary-dark {
     color: var(--color-primary-dark);
 }
+
+/*
+//////////////////////////////////////////////////
+Classes
+//////////////////////////////////////////////////
+ */
+/*  Cards */
+.card{
+    width: 200px;
+    height: 300px;
+    filter: drop-shadow(0 10px 5px var(--color-accent-shadow));
+    transition: all 200ms ease-in;
+}
+
+.card:hover{
+    outline: var(--color-accent-normal) 3px solid;
+    scale: 103%;
+}
+
+.searchedCards{
+    width: 250px;
+    height: 200px;
+}
+
+.movieTitle {
+    font-size: 1.25rem;
+    line-height: 1;
+    font-weight: bold;
+}
+
+/* Badges */
+.avg-badge {
+    background-color: var(--color-primary-dark);
+    position: absolute;
+    font-size: 1rem;
+    top: 85%;
+    right: 75%;
+}
+
+.usr-badge {
+    background-color: var(--color-accent-normal);
+    position: absolute;
+    font-size: 1rem;
+    top: 85%;
+    left: 75%;
+}
+
+.search-badge {
+    background-color: var(--color-accent-normal);
+    position: absolute;
+    font-size: 1rem;
+    top: 70%;
+    right: 2%;
+}
+
+/* Buttons */
+.btn-edit {
+    background-color: var(--color-accent-normal);
+    position: absolute;
+    top: 2%;
+    right: 2%;
+}
+
+.btn-edit:hover {
+    background-color: var(--color-accent-dark);
+}
+
 .input-group-text{
-    float: left;
+    text-align: left;
     width: 80%;
     border-radius: 5px 0 0 5px;
 }
+
 .searchBtn {
     color: white;
     float: left;
@@ -116,9 +127,22 @@ body {
     border-left: none;
     border-radius: 0 5px 5px 0;
 }
+
+#addMovieName:focus,
+#select-genre:focus,
+#select-sort:focus{
+    outline-color:var(--color-accent-normal);
+}
+
+/*  Hidden */
+.notSelectable{
+    user-select: none;
+    user-focus: none;
+}
 .yourRating{
     display: none;
 }
-#addMovieName:focus {
-    outline-color:var(--color-accent-normal);
+.hidden {
+    display: none;
 }
+

@@ -14,7 +14,7 @@ Main Library Section
 
         setGenreSelector();
 
-        resizeLongTitles()
+        resizeLongTitles();
 
         createButtons(editSubmitBtns, editMovie);
         createButtons(editDeleteBtns, deleteMovie);
@@ -259,7 +259,7 @@ Fetch & Loading Logic
         $('#movieLibrary').html("");
         fetch(dbUrl).then(resp => resp.json())
             .then(data => {
-                getMovieLibrary(data)
+                getMovieLibrary(data);
             })
             .finally(() => {
                 hideLoading();
@@ -296,6 +296,7 @@ Movie Library Sorting Section
                 genreList.push(genre);
             }
         }
+        genreList.sort();
         return html;
     }
 
