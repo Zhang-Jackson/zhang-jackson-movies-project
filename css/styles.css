@@ -1,5 +1,16 @@
+:root {
+    --color-primary: #bb2649;
+    --color-dark: #17293a
+}
+
 .card{
     width: 200px;
+    height: 300px;
+}
+
+body {
+    font-size: .75rem;
+    background-color: var(--color-dark);
 }
 
 .input-group-text{
@@ -28,4 +39,18 @@
 }
 .hidden {
     display: none;
+}
+.movieTitle {
+    font-size: 1.25rem;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.notSelectable{
+    user-select: none;
+    user-focus: none;
+}
+
+.bg-primary {
+
 }
