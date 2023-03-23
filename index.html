@@ -21,8 +21,11 @@
   <header class="row text-center">
   </header>
   <section class="row">
-    <div class="col-8 bg-primary-dark">
-      <div class="row bg-accent-dark mb-3 d-flex justify-content-center p-3">
+    <div class="col-8 bg-accent-normal pt-3">
+      <h3 class="title text-light fw-bolder text-center">Jackson & Zhang's Movie Warehouse</h3>
+      <div class="row  mb-3 d-flex justify-content-center p-3">
+
+        <!-- Movie Sorting Selectors -->
         <div class="col-4">
           <label for="select-genre"></label>
           <select id="select-genre" class="form-select-sm">
@@ -40,18 +43,23 @@
           </select>
         </div>
       </div>
+
+      <!-- Loading Image -->
       <div class="loadingimage" id="loading">
         <img src="../zhang-jackson-movies-project/assets/popcorn.gif" id="reload" alt="loading" class="img-fluid">
       </div>
-      <h3 class="title text-light fw-bolder text-center">Jackson & Zhang's Movie Warehouse</h3>
+
+      <!-- Spot where movie library populates -->
       <div id="movieList" class="cards row d-flex justify-content-evenly gap-3 p-3"></div>
     </div>
-    <div class="col-4 bg-accent-normal p-3">
-      <form class="row">
+
+    <!-- Sidebar for new movies -->
+    <div class="col-4 bg-accent-dark p-3">
+      <form class="row px-2">
         <label for="addMovieName" class="text-light"></label>
         <br>
         <input type="text" id="addMovieName" class="input-group-text" placeholder="Search movie name">
-        <button id="btn-addMovie" class="btn bg-accent-dark searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button id="btn-addMovie" class="btn bg-accent-normal searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
         <br>
         <label for="addMovieRating" class="text-light display-none"></label>
         <br>
@@ -59,6 +67,7 @@
         <br>
       </form>
 
+      <!-- Spot where new movies populate -->
       <div class="row" id="movieSearchDiv">
 
       </div>

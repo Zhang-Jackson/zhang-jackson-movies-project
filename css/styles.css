@@ -1,6 +1,7 @@
 :root {
     --color-accent-normal: #BE3455;
     --color-accent-dark: #770b24;
+    --color-accent-shadow: #4d0314;
     --color-primary-dark: #0d1a26
 }
 *{
@@ -13,7 +14,15 @@ header{
 .card{
     width: 200px;
     height: 300px;
+    filter: drop-shadow(0 10px 5px var(--color-accent-shadow));
+    transition: all 200ms ease-in;
 }
+
+.card:hover{
+    outline: var(--color-accent-normal) 3px solid;
+    scale: 103%;
+}
+
 .searchedCards{
     width: 250px;
     height: 200px;
@@ -111,5 +120,5 @@ body {
     display: none;
 }
 #addMovieName:focus {
-    outline-color:var(--color-accent-dark);
+    outline-color:var(--color-accent-normal);
 }
