@@ -159,8 +159,10 @@ function deleteMovie(e) {
     e.preventDefault();
     let btn = (e.target.id).indexOf("-");
     let btnId = (e.target.id).slice(btn + 1);
-
+    console.log(btn);
+    console.log(btnId);
     let movie = document.getElementById(`editMovieId-${btnId}`)
+    console.log(movie);
     let movieId = movie.innerText;
 
     fetchThis("DELETE",null,movieId)
@@ -283,6 +285,10 @@ function hideLoading() {
 
 function createGenreHtml(data){
     let html = "";
+    console.log(data);
+    if(!data){
+        data = ["genres"]
+    }
     for(let genre of data){
         html += `<div class="badge bg-accent-normal col-auto">`
         html += `<span>${genre}</span>`
@@ -360,12 +366,12 @@ function createModalHtml(data, i){
     html += `<div class="modal-dialog">`;
     html += `<div class="modal-content">`;
 
-    // html += `<div class="modal-header bg-primary-dark text-light border-0">`;
-    // html += `<p id="editModalLabel${i}" class="modal-title fs-5 fw-bold color-primary-ark">Edit Movie`;
-    // html += `<span id="editMovieId-${i}" class="visually-hidden"> ${data.id}</span></p>`;
-    // html += `<span id="editMovieDbId-${i}" class="visually-hidden"> ${data.dbId}</span></p>`;
-    // html += `<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
-    // html += `</div>`;//end of modal header
+    html += `<div class="modal-header bg-primary-dark text-light border-0">`;
+    html += `<p id="editModalLabel${i}" class="modal-title fs-5 fw-bold color-primary-ark">Edit Movie`;
+    html += `<span id="editMovieId-${i}" class="visually-hidden"> ${data.id}</span></p>`;
+    html += `<span id="editMovieDbId-${i}" class="visually-hidden"> ${data.dbId}</span></p>`;
+    html += `<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+    html += `</div>`;//end of modal header
 
     html += `<div class="modal-body bg-primary-dark text-light border-0">`;
     html += `<form>`;
