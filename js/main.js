@@ -389,4 +389,3 @@ searchMovieBtn.addEventListener("click", searchMovie);
 selectSortType.addEventListener("change", sortByRatings);
 
 getMovieListDbData();
-
