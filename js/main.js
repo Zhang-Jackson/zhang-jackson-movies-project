@@ -60,10 +60,8 @@ Main Library Section
     }
 
     function flipCard(e){
-        let back = (e.target.parentNode.parentNode.id).indexOf("-");
-        let backId = (e.target.parentNode.parentNode.id).slice(back + 1);
-        let back2 = (e.target.id).indexOf("-");
-        let backId2 = (e.target.id).slice(back2 + 1);
+        let backId = findBtnId(e.target.parentNode.parentNode.id);
+        let backId2 = findBtnId(e.target.id);
 
         let clickedBackText = document.getElementById(`cardBack-${backId}`);
         let clickedBackText2 = document.getElementById(`cardBack-${backId2}`);
@@ -89,6 +87,9 @@ Utility Functions Section
                 emptyButtonArrays();
                 getDbData();
                 hideLoading();
+            })
+            .catch(() => {
+                console.log("error");
             });
 
         } else {
@@ -102,6 +103,9 @@ Utility Functions Section
                 emptyButtonArrays();
                 getDbData();
                 hideLoading();
+            })
+            .catch(() => {
+                console.log("error");
             });
         }
     }
@@ -120,14 +124,18 @@ Utility Functions Section
         cardList = [];
     }
 
+    function findBtnId(targetId){
+        let index = targetId.indexOf("-")
+        return targetId.slice(index +1);
+    }
+
 /*
 /////////////////////////////////////////////////////////////////////////////
 Edit Modal Section
 /////////////////////////////////////////////////////////////////////////////
 */
     function editMovie(e){
-        let btn = (e.target.id).indexOf("-");
-        let btnId = (e.target.id).slice(btn + 1);
+        let btnId = findBtnId(e.target.id);
 
         let movie = document.getElementById(`editMovieId-${btnId}`)
         let movieId = movie.innerText;
@@ -177,8 +185,7 @@ Edit Modal Section
 
     function deleteMovie(e) {
         e.preventDefault();
-        let btn = (e.target.id).indexOf("-");
-        let btnId = (e.target.id).slice(btn + 1);
+        let btnId = findBtnId(e.target.id);
         let movie = document.getElementById(`editMovieId-${btnId}`)
         let movieId = movie.innerText;
 
@@ -216,8 +223,7 @@ Movie Search Section
     }
 
     function selectMovie(e){
-        let btn = (e.target.id).indexOf("-");
-        let btnId = (e.target.id).slice(btn + 1);
+        let btnId = findBtnId(e.target.id);
 
         let db = document.getElementById(`selectMovieId-${btnId}`)
         let dbId = db.innerText;
@@ -261,6 +267,9 @@ Fetch & Loading Logic
             .then(data => {
                 getMovieLibrary(data);
             })
+            .catch(() => {
+                console.log("error");
+            })
             .finally(() => {
                 hideLoading();
             });
@@ -282,7 +291,6 @@ Movie Library Sorting Section
 /////////////////////////////////////////////////////////////////////////////
  */
     function setGenreSelector(){
-        console.log(`set genre: ${currentGenreSelected}`);
         let html =``;
         html += `<option value="0">select genre</option>`
         for(let i = 0; i < genreList.length; i++){
@@ -332,7 +340,7 @@ Movie Library Sorting Section
                 );
                 createLibrary(userMovieLibrary);
                 break;
-            case '3': // sort alpa a-Z
+            case '3': // sort alpha a-Z
                 userMovieLibrary.sort(
                     (a, b) => ((a.title) > (b.title)) ? 1 : ((a.title) < (b.title) ? -1 : 0)
                 );
@@ -464,7 +472,6 @@ HTML Builder Sections
 
     function createGenreHtml(data){
         let html = "";
-        console.log(data);
         if(!data){
             data = ["genres"]
         }
