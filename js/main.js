@@ -281,30 +281,16 @@ Fetch & Loading Logic
 Movie Library Sorting Section
 /////////////////////////////////////////////////////////////////////////////
  */
-    function createGenreHtml(data){
-        let html = "";
-        console.log(data);
-        if(!data){
-            data = ["genres"]
-        }
-        for(let genre of data){
-            html += `<div class="badge bg-accent-normal col-auto">`
-            html += `<span>${genre}</span>`
-            html += `</div>`
-
-            if(!genreList.includes(genre)){
-                genreList.push(genre);
-            }
-        }
-        genreList.sort();
-        return html;
-    }
-
     function setGenreSelector(){
+        console.log(`set genre: ${currentGenreSelected}`);
         let html =``;
-        html += `<option selected value="0">select genre</option>`
-        for(let genre of genreList){
-            html += `<option value="${genre}">${genre}</option>`
+        html += `<option value="0">select genre</option>`
+        for(let i = 0; i < genreList.length; i++){
+            if(currentGenreSelected === genreList[i]){
+                html += `<option selected value="${genreList[i]}">${genreList[i]}</option>`
+            } else {
+                html += `<option value="${genreList[i]}">${genreList[i]}</option>`
+            }
         }
         selectGenre.innerHTML = html;
     }
@@ -312,18 +298,24 @@ Movie Library Sorting Section
     function sortByGenre(){
         moviesByGenre = [];
         let selectedGenre = selectGenre.value;
-        for(let movie of userMovieLibrary){
-            let isMatch = false;
-            for(let genre of movie.genres){
-                if(selectedGenre === genre){
-                    isMatch = true;
+        currentGenreSelected = selectedGenre;
+
+        if(selectedGenre === 0 || selectedGenre === '0'){
+            createLibrary(userMovieLibrary);
+        }else {
+            for(let movie of userMovieLibrary){
+                let isMatch = false;
+                for(let genre of movie.genres){
+                    if(selectedGenre === genre){
+                        isMatch = true;
+                    }
+                }
+                if(isMatch){
+                    moviesByGenre.push(movie);
                 }
             }
-            if(isMatch){
-                moviesByGenre.push(movie);
-            }
+            createLibrary(moviesByGenre);
         }
-        createLibrary(moviesByGenre);
     }
 
     function sortByRatings(){
@@ -470,11 +462,30 @@ HTML Builder Sections
         createButtons(selectMovieBtns, selectMovie);
     }
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-Global variables and listeners
-/////////////////////////////////////////////////////////////////////////////
-*/
+    function createGenreHtml(data){
+        let html = "";
+        console.log(data);
+        if(!data){
+            data = ["genres"]
+        }
+        for(let genre of data){
+            html += `<div class="badge bg-accent-normal col-auto">`
+            html += `<span>${genre}</span>`
+            html += `</div>`
+
+            if(!genreList.includes(genre)){
+                genreList.push(genre);
+            }
+        }
+        genreList.sort();
+        return html;
+    }
+
+    /*
+    /////////////////////////////////////////////////////////////////////////////
+    Global variables and listeners
+    /////////////////////////////////////////////////////////////////////////////
+    */
     const dbUrl = "https://productive-bristle-edam.glitch.me/movies/"
     let userMovieLibrary = [];
     let editDeleteBtns = [];
@@ -483,6 +494,7 @@ Global variables and listeners
     let genreList = [];
     let cardList = [];
     let moviesByGenre = [];
+    let currentGenreSelected = 0;
 
     let addTitle = document.getElementById("addMovieName");
     let addRating = document.getElementById('addMovieRating');
