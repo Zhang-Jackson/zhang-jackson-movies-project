@@ -21,18 +21,18 @@
   <header class="row text-center">
   </header>
   <section class="row">
-    <div class="col-8 bg-accent-normal pt-3">
+    <div class="col-12 col-md-8 order-2 order-md-1 bg-accent-normal pt-3 rounded-bottom">
       <h3 class="title text-light fw-bolder text-center">Jackson & Zhang's Movie Warehouse</h3>
-      <div class="row  mb-3 d-flex justify-content-center p-3">
+      <div class="row mb-3 d-flex justify-content-center p-0">
 
         <!-- Movie Sorting Selectors -->
-        <div class="col-4">
+        <div class="col-4 d-flex justify-content-start justify-content-sm-center p-0">
           <label for="select-genre"></label>
           <select id="select-genre" class="form-select-sm">
             <option selected value="0">select genre</option>
           </select>
         </div>
-        <div class="col-4">
+        <div class="col-4 d-flex justify-content-end justify-content-sm-center p-0">
           <label for="select-sort"></label>
           <select id="select-sort" class="form-select-sm">
             <option selected value="0">sort by</option>
@@ -54,12 +54,12 @@
     </div>
 
     <!-- Sidebar for new movies -->
-    <div class="col-4 bg-accent-dark p-3">
+    <div class="col-12 col-md-4 order-1 order-md-2 bg-accent-dark p-3 rounded-bottom">
       <form class="row px-2">
         <label for="addMovieName" class="text-light"></label>
         <br>
-        <input type="text" id="addMovieName" class="input-group-text" placeholder="Search movie name">
-        <button id="btn-addMovie" class="btn bg-accent-normal searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <input type="text" id="addMovieName" class="input-group-text col" placeholder="Search movie name">
+        <button id="btn-addMovie" class="btn bg-accent-normal searchBtn col-auto pe-1 ps-0"><i class="fa-solid fa-magnifying-glass"></i></button>
         <br>
         <label for="addMovieRating" class="text-light display-none"></label>
         <br>
