@@ -1,3 +1,56 @@
+:root {
+    --blue: #268dcd;
+    --grey: #e3ebec;
+}
+*{
+    font-family: 'Metrophobic', sans-serif;
+}
+.title,.searchName, .yourRating{
+    color: var(--blue);
+}
+header{
+    background-image: url("/img/title-bg.png");
+    height: 150px;
+}
+.searchPart, .filter{
+    background-color: var(--grey);
+}
+.input-group-text{
+    float: left;
+    width: 80%;
+    border-radius: 5px 0 0 5px;
+}
+.searchBtn {
+    color: white;
+    float: left;
+    width: 20%;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+    background-color: var(--blue);
+}
+.searchBtn:hover{
+    background-color: #0a53be;
+    color: white;
+}
+.card-search {
+    background-image: url("/img/card-bg.png");
+    background-size: cover;
+    width: 200px;
+    border: 1px;
+    border-radius: 5px;
+}
+.card-header-search {
+    width: 200px;
+    border-radius: 5px 5px 0 0;
+}
+.btn {
+    background-color: var(--blue);
+    color: white;
+}
+.btn:hover{
+    background-color: #0a53be;
+    color: white;
+}
 .card{
     width: 200px;
 }
@@ -14,18 +67,38 @@
     right: 75%;
 }
 .usr-badge {
-    background-color: deeppink;
+    background-color: var(--blue);
     position: absolute;
     font-size: 1rem;
     top: 90%;
     left: 75%;
 }
 .btn-edit {
-    background-color: deeppink;
+    background-color: var(--blue);
+    border: none;
     position: absolute;
     top: 2%;
     right: 2%;
 }
-.hidden {
-    display: none;
+.btn-edit:hover {
+    background-color: #0a53be;
 }
+.fa-pen-to-square {
+    color: white;
+    width: 20px;
+}
+.card-title{
+    height: 35px;
+}
+.btn-delete{
+    background-color: red;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    width: 77px;
+    height: 38px;
+}
+.btn-delete:hover{
+    background-color: #a8000f;
+}
+

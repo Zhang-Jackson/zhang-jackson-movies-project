@@ -90,6 +90,14 @@ function setMovieList(data){
     userMovieList = [];
     setTimeout(() => {
         createMovieListArray(data);
+        $('.movieTitle').each(function() {
+            const titleLength = $(this).text().length;
+            if(titleLength <= 50 && titleLength > 23) {
+                $(this).css("font-size", "13px");
+            } else if (titleLength > 50 ) {
+                $(this).css("font-size", "11px");
+            }
+        });
     },1500)
 }
 
@@ -270,18 +278,18 @@ function createMovieListHtml(data){
     let html = '';
     for(let i = 0; i < data.length; i++) {
         let databaseRating = data[i].dbRating;
-        html += `<div class="card col-auto px-0">`;
+        html += `<div class="card col-auto px-0 mx-3">`;
         html += `<div class="card-header p-0  img-fluid position-relative">`;
         html += `<span class=" avg-badge badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
         html += `<span class=" usr-badge badge rounded-pill">${data[i].rating}</span>`;
         html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded-top img-fluid">`;
-        html += `<button type="button" class="btn btn-primary rounded-circle btn-edit p-2" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
-        html += `<img src="/assets/pencil.svg" alt="edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
+        html += `<button type="button" class="btn-edit rounded-circle p-2" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
+        //html += `<img src="/assets/pencil.svg" alt="edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
+        html += `<i class="fa-solid fa-pen-to-square fa-xl" alt="edit icon"></i></button>`;
         html += `</div>`;
 
-        html += `<div class="card-body pt-0 border">`;
-        html += `<p class="movieTitle text-center">${data[i].title}</p>`;
-        //html += `<p><span>Genre(s): </span>${data[i].genre}</p>`
+        html += `<div class="card-title p=0 d-flex align-items-center text-center">`;
+        html += `<p class="movieTitle mx-auto my-1 text-center text-bold">${data[i].title}</p>`;
         html += `</div>`;
         html += `</div>`;//end of card
 
@@ -316,9 +324,9 @@ function createModalHtml(data, i){
 
     html += `<div class="modal-footer">`;
     html += `<div class="me-auto">`
-    html += `<button type="button" class="btn btn-danger ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}" data-bs-dismiss="modal">Delete</button>`;
+    html += `<button type="button" class="btn-delete btn-danger ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}" data-bs-dismiss="modal">Delete</button>`;
     html += `</div>`//end of deleteBtn
-    html += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
+    //html += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
     html += `<button type="button" class="btn btn-primary testEdits" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
     html += `</div>`;//end of modal-footer
 
@@ -340,22 +348,23 @@ function createMovieSearchHtml(data){
         let html = "";
         for (let i = 0; i < numberOfDisplayedMovies; i++){
 
-            html += `<div class="card col-auto p-0 mx-auto my-3 border-0">`
-            html += `<div class="card-header p-0 overflow-hidden">`
+            html += `<div class="card-search col-auto mx-auto my-3 p-0 text-center">`
+            html += `<div class="card-header-search p-0 ms-0 overflow-hidden">`
             html += `<img src="https://image.tmdb.org/t/p/w300/${data.results[(hasImageArray[i])].backdrop_path}" alt="movie"
                         class="img-fluid">`
             html += `</div>`//end of header
             html += `<div class="card-body">`
-            html += `<p>${data.results[(hasImageArray[i])].title}</p>`
-            html += `<p>${data.results[(hasImageArray[i])].release_date}</p>`
+            html += `<p class="h5">${data.results[(hasImageArray[i])].title}</p>`
+            html += `<p><span>Premiere: </span>${data.results[(hasImageArray[i])].release_date}</p>`
             html += `<p><span>Avg Rating: </span>${data.results[(hasImageArray[i])].vote_average}</p>`
             html += `<p id="selectMovieId-${i}">${data.results[(hasImageArray[i])].id}</p>`
             html += `</div>`//end of body
             html += `<div class="card-footer">`
-            html += `<button type="button" class="btn btn-primary" id="btnSelect-${[i]}">`
+            html += `<button type="button" class="btn mb-1" id="btnSelect-${[i]}">`
             html += `Select</button>`
             html += `</div>`//end of footer
             html += `</div>`//end of card
+
 
             selectMovieBtns.push(`#btnSelect-${[i]}`);
         }
