@@ -228,7 +228,7 @@ Movie Search Section
         let db = document.getElementById(`selectMovieId-${btnId}`)
         let dbId = db.innerText;
 
-        let userRating = addRating.value;
+        let userRating = 0;
 
         addMovie(dbId, userRating);
         movieSearchDiv.innerHTML = "";
@@ -252,7 +252,6 @@ Movie Search Section
             fetchThis("POST", newMovie, "");
 
             addTitle.value = "";
-            addRating.value = "";
         });
     }
 /*
@@ -330,13 +329,31 @@ Movie Library Sorting Section
         switch (selectSortType.value){
             case '1': //rating low to high
                 userMovieLibrary.sort(
-                    (a, b) => (parseInt(a.dbRating) > parseInt(b.dbRating)) ? 1 : (parseInt(a.dbRating) < parseInt(b.dbRating) ? -1 : 0)
+                    (a, b) => {
+                        if (a.rating === 'N/A') {
+                            return -1; // treat 'N/A' as the highest value, so 'a' comes before 'b'
+                        } else if (b.rating === 'N/A') {
+                            return 1; // treat 'N/A' as the highest value, so 'b' comes before 'a'
+                        } else {
+                            // compare the numeric values of the dbRating property
+                            return parseInt(a.rating) > parseInt(b.rating) ? 1 : parseInt(a.rating) < parseInt(b.rating) ? -1 : 0;
+                        }
+                    }
                 );
                 createLibrary(userMovieLibrary);
                 break;
             case '2': //rating high to low
                 userMovieLibrary.sort(
-                    (a, b) => (parseInt(a.dbRating) < parseInt(b.dbRating)) ? 1 : (parseInt(a.dbRating) > parseInt(b.dbRating) ? -1 : 0)
+                    (a, b) => {
+                        if (a.rating === 'N/A') {
+                            return -1; // treat 'N/A' as the highest value, so 'a' comes before 'b'
+                        } else if (b.rating === 'N/A') {
+                            return 1; // treat 'N/A' as the highest value, so 'b' comes before 'a'
+                        } else {
+                            // compare the numeric values of the dbRating property
+                            return parseInt(a.rating) < parseInt(b.rating) ? 1 : parseInt(a.rating) > parseInt(b.rating) ? -1 : 0;
+                        }
+                    }
                 );
                 createLibrary(userMovieLibrary);
                 break;
@@ -370,23 +387,23 @@ HTML Builder Sections
         let html = '';
         for(let i = 0; i < data.length; i++) {
             let databaseRating = data[i].dbRating;
-            html += `<div class="card col-auto px-0 border-0" id="cardFront-${[i]}" data-front-hidden="false">`;
-            html += `<div class="card-header p-0  img-fluid position-relative">`;
-            html += `<span class=" avg-badge badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
-            html += `<span class=" usr-badge badge rounded-pill">${data[i].rating}</span>`;
-            html += `<img src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="movie" class="rounded img-fluid" id="image-${[i]}">`;
-            html += `<button type="button" class="btn bg-accent-normal rounded-circle btn-edit p-2" id="btn-edit${[i]}" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
-            html += `<img src="/assets/pencil.svg" alt="edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
-            html += `</div>`;
+            html += `<div id="cardFront-${[i]}" class="card col-auto px-0 border-0" data-front-hidden="false">`;
+            html += `<div class="card-header p-0 position-relative img-fluid">`;
+            html += `<span class="badge avg-badge rounded-pill">${parseFloat(databaseRating).toFixed(1)}</span>`;
+            html += `<span class="badge usr-badge rounded-pill">${data[i].rating}</span>`;
+            html += `<img id="image-${[i]}" src="https://image.tmdb.org/t/p/w300/${data[i].poster}" alt="${data[i].title}'s movie poster" class="img-fluid rounded" >`;
+            html += `<button id="btn-edit${[i]}" type="button" class="btn bg-accent-normal rounded-circle btn-edit p-2" data-bs-toggle="modal" data-bs-target="#editModal${i}">`;
+            html += `<img src="/assets/pencil.svg" alt="${data[i].title}'s edit icon" style="width: 18px; aspect-ratio: 1;"></button>`;
+            html += `</div>`;//end card head
 
 
 
-            html += `<div class="card overflow-scroll position-absolute p-2 border-0" data-back-hidden="true" id="cardBack-${[i]}" hidden="hidden">`;
-            html += `<p class="movieTitle text-center notSelectable">${data[i].title}</p>`
+            html += `<div id="cardBack-${[i]}" class="card position-absolute p-2 overflow-scroll border-0" data-back-hidden="true" hidden="hidden">`;
+            html += `<p class="text-center movieTitle notSelectable">${data[i].title}</p>`
 
-            html += `<div class="row mx-auto d-flex justify-content-center gap-1 mb-3">`
+            html += `<div class="row d-flex justify-content-center gap-1 mx-auto mb-3">`
             html += createGenreHtml(data[i].genres);
-            html += `</div>`
+            html += `</div>`//end genre pills
 
             html += `<p class="notSelectable">${data[i].overview}</p>`
             html += `<p class="notSelectable"><span class="fw-bold">Release: </span>${data[i].release}`;
@@ -401,12 +418,12 @@ HTML Builder Sections
 
     function createModalHtml(data, i){
         let html ='';
-        html += `<div class="modal fade" id="editModal${i}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel${i}" aria-hidden="true">`;
+        html += `<div id="editModal${i}" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel${i}" aria-hidden="true">`;
         html += `<div class="modal-dialog">`;
         html += `<div class="modal-content">`;
 
         html += `<div class="modal-header bg-primary-dark text-light border-0">`;
-        html += `<p id="editModalLabel${i}" class="modal-title fs-5 fw-bold color-primary-ark">Edit Movie`;
+        html += `<p id="editModalLabel${i}" class="modal-title fs-5 fw-bold">Edit Movie`;
         html += `<span id="editMovieId-${i}" class="visually-hidden"> ${data.id}</span></p>`;
         html += `<span id="editMovieDbId-${i}" class="visually-hidden"> ${data.dbId}</span></p>`;
         html += `<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
@@ -418,17 +435,17 @@ HTML Builder Sections
         html += `<br>`;
         html += `<label for="editMovieRating${i}" class="">Your Rating</label>`;
         html += `<br>`;
-        html += `<input type="text" id="editMovieRating${i}" class="input-group-text" value="${data.rating}"`;
+        html += `<input id="editMovieRating${i}"  type="text" class="input-group-text" value="${data.rating}"`;
         html += `<br>`;
         html += `</form>`;
         html += `</div>`;//end modal body
 
         html += `<div class="modal-footer bg-accent-dark border-0">`;
         html += `<div class="me-auto">`
-        html += `<button type="button" class="btn bg-primary-dark color-accent-normal ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}" data-bs-dismiss="modal">Delete</button>`;
+        html += `<button id="btnDelete-${[i]}" type="button" class="btn bg-primary-dark color-accent-normal ms-0" data-movieid="${data.id}" data-bs-dismiss="modal">Delete</button>`;
         html += `</div>`//end of deleteBtn
         html += `<button type="button" class="btn bg-accent-normal text-light" data-bs-dismiss="modal">Cancel</button>`;
-        html += `<button type="button" class="btn bg-accent-normal text-light" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
+        html += `<button id="btnSubmitEdit-${[i]}" type="button" class="btn bg-accent-normal text-light" data-bs-dismiss="modal">Submit</button>`;
         html += `</div>`;//end of modal-footer
 
         html += `</div>`;//end of modal-content
@@ -449,16 +466,16 @@ HTML Builder Sections
             let html = "";
             for (let i = 0; i < numberOfDisplayedMovies; i++){
 
-                html += `<div class="card searchedCards col-auto p-0 mx-auto my-3 border-0 h-100">`
-                html += `<div class="card-header p-0 overflow-hidden position-relative">`
-                html += `<img src="https://image.tmdb.org/t/p/w300/${data.results[(hasImageArray[i])].backdrop_path}" alt="movie"
+                html += `<div class="card col-auto mx-auto my-3 p-0 searchedCards border-0 h-100">`
+                html += `<div class="card-header position-relative p-0 overflow-hidden ">`
+                html += `<img src="https://image.tmdb.org/t/p/w300/${data.results[(hasImageArray[i])].backdrop_path}" alt="${data.results[(hasImageArray[i])].title}'s image"
                             class="img-fluid">`
-                html += `<span class=" search-badge badge rounded-pill">${(data.results[(hasImageArray[i])].vote_average).toFixed(1)}</span>`;
+                html += `<span class="badge search-badge rounded-pill">${(data.results[(hasImageArray[i])].vote_average).toFixed(1)}</span>`;
                 html += `</div>`//end of header
                 html += `<div class="card-footer bg-accent-dark text-light text-center border-0">`
                 html += `<p class="h5">${data.results[(hasImageArray[i])].title}</p>`
                 html += `<p id="selectMovieId-${i}" class="visually-hidden">${data.results[(hasImageArray[i])].id}</p>`
-                html += `<button type="button" class="btn bg-accent-normal text-light" id="btnSelect-${[i]}">`
+                html += `<button id="btnSelect-${[i]}" type="button" class="btn bg-accent-normal text-light">`
                 html += `Select</button>`
                 html += `</div>`//end of footer
                 html += `</div>`//end of card
@@ -476,7 +493,7 @@ HTML Builder Sections
             data = ["genres"]
         }
         for(let genre of data){
-            html += `<div class="badge bg-accent-normal col-auto">`
+            html += `<div class="badge col-auto bg-accent-normal">`
             html += `<span>${genre}</span>`
             html += `</div>`
 
