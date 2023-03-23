@@ -3,7 +3,13 @@
     --color-accent-dark: #770b24;
     --color-primary-dark: #0d1a26
 }
-
+*{
+    font-family: 'Metrophobic', sans-serif;
+}
+header{
+    background-image: url("/img/title-bg.png");
+    height: 150px;
+}
 .card{
     width: 200px;
     height: 300px;
@@ -49,6 +55,9 @@ body {
     top: 2%;
     right: 2%;
 }
+.btn-edit:hover {
+    background-color: var(--color-accent-dark);
+}
 .hidden {
     display: none;
 }
@@ -85,4 +94,22 @@ body {
 
 .color-primary-dark {
     color: var(--color-primary-dark);
+}
+.input-group-text{
+    float: left;
+    width: 80%;
+    border-radius: 5px 0 0 5px;
+}
+.searchBtn {
+    color: white;
+    float: left;
+    width: 20%;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+}
+.yourRating{
+    display: none;
+}
+#addMovieName:focus {
+    outline-color:var(--color-accent-dark);
 }

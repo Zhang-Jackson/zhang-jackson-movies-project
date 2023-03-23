@@ -419,8 +419,8 @@ function createMovieSearchHtml(data){
             // html += `<div class="card-body border-0">`
             //
             // html += `</div>`//end of body
-            html += `<div class="card-footer bg-accent-dark text-light border-0">`
-            html += `<p>${data.results[(hasImageArray[i])].title}</p>`
+            html += `<div class="card-footer bg-accent-dark text-light text-center border-0">`
+            html += `<p class="h5">${data.results[(hasImageArray[i])].title}</p>`
             html += `<p id="selectMovieId-${i}" class="visually-hidden">${data.results[(hasImageArray[i])].id}</p>`
             html += `<button type="button" class="btn bg-accent-normal text-light" id="btnSelect-${[i]}">`
             html += `Select</button>`
