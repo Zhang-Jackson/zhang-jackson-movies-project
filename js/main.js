@@ -346,9 +346,9 @@ Movie Library Sorting Section
                 userMovieLibrary.sort(
                     (a, b) => {
                         if (a.rating === 'N/A') {
-                            return 1; // treat 'N/A' as the highest value, so 'a' comes before 'b'
+                            return 1; // treat 'N/A' as the lowest value, so 'b' comes before 'a'
                         } else if (b.rating === 'N/A') {
-                            return -1; // treat 'N/A' as the highest value, so 'b' comes before 'a'
+                            return -1; // treat 'N/A' as the lowest value, so 'a' comes before 'b'
                         } else {
                             // compare the numeric values of the dbRating property
                             return parseInt(a.rating) < parseInt(b.rating) ? 1 : parseInt(a.rating) > parseInt(b.rating) ? -1 : 0;
