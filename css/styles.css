@@ -1,12 +1,19 @@
 :root {
     --color-accent-normal: #BE3455;
     --color-accent-dark: #770b24;
+    --color-accent-shadow: #410311;
     --color-primary-dark: #0d1a26
 }
 
 .card{
     width: 200px;
     height: 300px;
+    filter: drop-shadow(0 10px 10px var(--color-accent-shadow));
+    transition: all 1s ease-in;
+}
+.card:hover{
+    outline: var(--color-accent-normal) solid 5px;
+    scale: 102%;
 }
 .searchedCards{
     width: 250px;

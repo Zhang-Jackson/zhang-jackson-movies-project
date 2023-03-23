@@ -1,2 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><polygon points="14.604 5.687 0 20.29 0 24 3.71 24 18.313 9.396 14.604 5.687"/><path d="M23.232.768a2.624,2.624,0,0,0-3.71,0l-3.5,3.505,3.709,3.709,3.5-3.5A2.624,2.624,0,0,0,23.232.768Z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path d="M311.552,121.323L0,432.853L0,512L79.147,512L390.677,200.448L311.552,121.323Z" style="fill:white;fill-rule:nonzero;stroke:white;stroke-width:1px;"/>
+    <path d="M495.616,16.384C473.903,-5.318 438.182,-5.318 416.469,16.384L341.803,91.157L420.928,170.283L495.595,95.616C506.115,85.118 512.034,70.852 512.034,55.989C512.034,41.138 506.124,26.88 495.616,16.384Z" style="fill:white;fill-rule:nonzero;stroke:white;stroke-width:1px;"/>
+</svg>

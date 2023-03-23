@@ -22,8 +22,8 @@
     <h1 class="title text-light fw-bolder">Jackson & Zhang's Movie Warehouse</h1>
   </header>
   <section class="row">
-    <div class="col-8 bg-primary-dark">
-      <div class="row bg-accent-dark mb-3 d-flex justify-content-center p-3">
+    <div class="col-8 bg-accent-normal rounded-start">
+      <div class="row mb-3 d-flex justify-content-center p-3 rounded-start">
         <div class="col-4">
           <label for="select-genre"></label>
           <select id="select-genre" class="form-select-sm">
@@ -42,12 +42,12 @@
         </div>
       </div>
       <div class="loadingimage" id="loading">
-        <img src="../zhang-jackson-movies-project/assets/popcorn.gif" id="reload" alt="loading" class="img-fluid">
+        <img src="../zhang-jackson-movies-project/assets/pop3.gif" id="reload" alt="loading" class="img-fluid">
       </div>
       <div id="movieList" class="cards row d-flex justify-content-evenly gap-3 p-3"></div>
     </div>
-    <div class="col-4 bg-accent-normal p-3">
-      <form>
+    <div class="col-4 bg-accent-dark p-3 rounded-end">
+      <form class="row g-2">
         <label for="addMovieName" class="text-light">Name of Movie</label>
         <br>
         <input type="text" id="addMovieName" class="input-group-text" placeholder="Snakes on a Plane">
@@ -57,7 +57,7 @@
         <br>
         <input type="text" id="addMovieRating" class="input-group-text" placeholder="10">
         <br>
-        <button id="btn-addMovie" class="btn bg-accent-dark text-light">Search Movie</button>
+        <button id="btn-addMovie" class="btn bg-accent-normal text-light">Search Movie</button>
       </form>
       <div class="row" id="movieSearchDiv">
 

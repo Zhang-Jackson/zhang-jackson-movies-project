@@ -410,7 +410,7 @@ function createMovieSearchHtml(data){
         let html = "";
         for (let i = 0; i < numberOfDisplayedMovies; i++){
 
-            html += `<div class="card searchedCards col-auto p-0 mx-auto my-3 border-0 ">`
+            html += `<div class="card searchedCards col-auto p-0 mx-auto my-3 border-0 h-100">`
             html += `<div class="card-header p-0 overflow-hidden position-relative">`
             html += `<img src="https://image.tmdb.org/t/p/w300/${data.results[(hasImageArray[i])].backdrop_path}" alt="movie"
                         class="img-fluid">`
