@@ -1,5 +1,21 @@
+:root {
+    --color-accent-normal: #BE3455;
+    --color-accent-dark: #770b24;
+    --color-primary-dark: #0d1a26
+}
+
 .card{
     width: 200px;
+    height: 300px;
+}
+.searchedCards{
+    width: 250px;
+    height: 200px;
+}
+
+body {
+    font-size: .75rem;
+    background-color: var(--color-primary-dark);
 }
 
 .input-group-text{
@@ -7,25 +23,66 @@
 }
 
 .avg-badge {
-    background-color: #101e29;
+    background-color: var(--color-primary-dark);
     position: absolute;
     font-size: 1rem;
-    top: 90%;
+    top: 85%;
     right: 75%;
 }
 .usr-badge {
-    background-color: deeppink;
+    background-color: var(--color-accent-normal);
     position: absolute;
     font-size: 1rem;
-    top: 90%;
+    top: 85%;
     left: 75%;
 }
+.search-badge {
+    background-color: var(--color-accent-normal);
+    position: absolute;
+    font-size: 1rem;
+    top: 70%;
+    right: 2%;
+}
 .btn-edit {
-    background-color: deeppink;
+    background-color: var(--color-accent-normal);
     position: absolute;
     top: 2%;
     right: 2%;
 }
 .hidden {
     display: none;
+}
+.movieTitle {
+    font-size: 1.25rem;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.notSelectable{
+    user-select: none;
+    user-focus: none;
+}
+
+.bg-accent-normal {
+    background-color: var(--color-accent-normal);
+}
+
+.color-accent-normal {
+    color: var(--color-accent-normal);
+}
+
+.bg-accent-dark {
+    background-color: var(--color-accent-dark);
+}
+
+.color-accent-dark {
+    color: var(--color-accent-dark);
+}
+
+.bg-primary-dark {
+    background-color: var(--color-primary-dark);
+}
+
+.color-primary-dark {
+    color: var(--color-primary-dark);
 }
