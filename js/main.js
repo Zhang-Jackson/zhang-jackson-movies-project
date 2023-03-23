@@ -344,8 +344,8 @@ function createMovieListHtml(data){
         html += `</div>`
 
         html += `<p class="notSelectable">${data[i].overview}</p>`
-        html += `<p class="notSelectable">Release: ${data[i].release}`;
-        html += `<p class="notSelectable" >Runtime: ${data[i].runtime} minutes</p>`
+        html += `<p class="notSelectable"><span class="fw-bold">Release: </span>${data[i].release}`;
+        html += `<p class="notSelectable" ><span class="fw-bold">Runtime: </span>${data[i].runtime} minutes</p>`
         html += `</div>`;//end card2
         html += `</div>`;//end of card set
         html += createModalHtml(data[i], i);
@@ -360,14 +360,14 @@ function createModalHtml(data, i){
     html += `<div class="modal-dialog">`;
     html += `<div class="modal-content">`;
 
-    html += `<div class="modal-header">`;
-    html += `<p id="editModalLabel${i}" class="modal-title fs-5">Edit Movie`;
-    html += `<span id="editMovieId-${i}" class="visually-hidden"> ${data.id}</span></p>`;
-    html += `<span id="editMovieDbId-${i}" class="visually-hidden"> ${data.dbId}</span></p>`;
-    html += `<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
-    html += `</div>`;//end of modal header
+    // html += `<div class="modal-header bg-primary-dark text-light border-0">`;
+    // html += `<p id="editModalLabel${i}" class="modal-title fs-5 fw-bold color-primary-ark">Edit Movie`;
+    // html += `<span id="editMovieId-${i}" class="visually-hidden"> ${data.id}</span></p>`;
+    // html += `<span id="editMovieDbId-${i}" class="visually-hidden"> ${data.dbId}</span></p>`;
+    // html += `<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
+    // html += `</div>`;//end of modal header
 
-    html += `<div class="modal-body">`;
+    html += `<div class="modal-body bg-primary-dark text-light border-0">`;
     html += `<form>`;
     html += `<h2 id="editMovieName${i}">${data.title}</h2>`;
     html += `<br>`;
@@ -378,12 +378,12 @@ function createModalHtml(data, i){
     html += `</form>`;
     html += `</div>`;//end modal body
 
-    html += `<div class="modal-footer">`;
+    html += `<div class="modal-footer bg-accent-dark border-0">`;
     html += `<div class="me-auto">`
-    html += `<button type="button" class="btn btn-danger ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}" data-bs-dismiss="modal">Delete</button>`;
+    html += `<button type="button" class="btn bg-primary-dark color-accent-normal ms-0" id="btnDelete-${[i]}" data-movieid="${data.id}" data-bs-dismiss="modal">Delete</button>`;
     html += `</div>`//end of deleteBtn
-    html += `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>`;
-    html += `<button type="button" class="btn bg-accent-normal testEdits" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
+    html += `<button type="button" class="btn bg-accent-normal text-light" data-bs-dismiss="modal">Cancel</button>`;
+    html += `<button type="button" class="btn bg-accent-normal text-light" data-bs-dismiss="modal" id="btnSubmitEdit-${[i]}">Submit</button>`;
     html += `</div>`;//end of modal-footer
 
     html += `</div>`;//end of modal-content

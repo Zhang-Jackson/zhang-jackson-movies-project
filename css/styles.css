@@ -1,7 +1,7 @@
 :root {
-    --color-accent-normal: #bb2649;
+    --color-accent-normal: #BE3455;
     --color-accent-dark: #770b24;
-    --color-primary-dark: #17293a
+    --color-primary-dark: #0d1a26
 }
 
 .card{
@@ -67,9 +67,22 @@ body {
     background-color: var(--color-accent-normal);
 }
 
+.color-accent-normal {
+    color: var(--color-accent-normal);
+}
+
 .bg-accent-dark {
     background-color: var(--color-accent-dark);
 }
+
+.color-accent-dark {
+    color: var(--color-accent-dark);
+}
+
 .bg-primary-dark {
     background-color: var(--color-primary-dark);
+}
+
+.color-primary-dark {
+    color: var(--color-primary-dark);
 }
